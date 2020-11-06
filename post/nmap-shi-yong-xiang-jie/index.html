@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1604629910550">
+<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1604630304087">
 <link rel="stylesheet" href="https://tututu12138.github.io/styles/main.css">
 
 
@@ -45,7 +45,7 @@ nmap -p 80,8081 192.168.50.1-253
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://tututu12138.github.io">
-        <img src="https://tututu12138.github.io/images/avatar.png?v=1604629910550" class="site-logo">
+        <img src="https://tututu12138.github.io/images/avatar.png?v=1604630304087" class="site-logo">
         <h1 class="site-title">tututu12138</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -155,13 +155,13 @@ nmap -p 80,8081 192.168.50.1-253<br>
 # 深入使用(了解一下):
 - TCP扫描：
 </code></pre>
-<p>​1.TCP连接扫描（-sT）：指定这个选项后，程序将和目标主机的每个端口都进行完整的三次 握手。如果成功建立连接，则判定该端口是开放端口。由于在检测每个端口时都需要进行三 次握手，所以这种扫描方式比较慢，而且扫描行为很可能被目标主机记录下来。如果启动 Nmap的用户的权限不足，那么默认情况下Nmap程序将以这种模式进行扫描。<br>
-​  2.SYN扫描（-sS）：该选项也称为半开连接或者SYN stealth。采用该选项后，Nmap将使用 含有SYN标志位的数据包进行端口探测。如果目标主机回复了SYN/ACK包，则说明该端口处 于开放状态：如果回复的是RST/ACK包，则说明这个端口处于关闭状态；如果没有任何响应 或者发送了ICMP unreachable信息，则可认为这个端口被屏蔽了。SYN模式的扫描速度非常 好。而且由于这种模式不会进行三次握手，所以是一种十分隐蔽的扫描方式。如果启动Nmap 的用户有高级别权限，那么在默认情况下Nmap程序将以这种模式进行扫描。<br>
-​  3.TCP NULL（-sN）、FIN（-sF）及XMAS（-sX）扫描：NULL 扫描不设置任何控制位； FIN扫描仅设置FIN标志位：XMAS扫描设置FIN、PSH和URG的标识位。如果目标主机返回 了含有RST标识位的响应数据，则说明该端口处于关闭状态；如果目标主机没有任何回应， 则该端口处于打开｜过滤状态。<br>
-​  4.TCP Maimon扫描（-sM）：Uriel Maimon 首先发现了TCP Maimom扫描方式。这种模式的 探测数据包含有FIN/ACK标识。对于BSD衍生出来的各种操作系统来说，如果被测端口处于 开放状态，主机将会丢弃这种探测数据包；如果被测端口处于关闭状态，那么主机将会回复 RST。<br>
-​  5.TCPACK扫描（-sA）：这种扫描模式可以检测目标系统是否采用了数据包状态监测技术 （stateful）防火墙，并能确定哪些端口被防火墙屏蔽。这种类型的数据包只有一个ACK标识 位。如果目标主机的回复中含有RST标识，则说明目标主机没有被过滤。<br>
-​  6.TCP窗口扫描（-sW）：这种扫描方式检测目标返回的RST数据包的TCP窗口字段。如果目 标端口处于开放状态，这个字段的值将是正值；否则它的值应当是0。<br>
-​  7.TCP Idle扫描（-sI）：采用这种技术后，您将通过指定的僵尸主机发送扫描数据包。本机 并不与目标主机直接通信。如果对方网络里有IDS，IDS将认为发起扫描的主机是僵尸主机。</p>
+<p>1.TCP连接扫描（-sT）：指定这个选项后，程序将和目标主机的每个端口都进行完整的三次 握手。如果成功建立连接，则判定该端口是开放端口。由于在检测每个端口时都需要进行三 次握手，所以这种扫描方式比较慢，而且扫描行为很可能被目标主机记录下来。如果启动 Nmap的用户的权限不足，那么默认情况下Nmap程序将以这种模式进行扫描。<br>
+2.SYN扫描（-sS）：该选项也称为半开连接或者SYN stealth。采用该选项后，Nmap将使用 含有SYN标志位的数据包进行端口探测。如果目标主机回复了SYN/ACK包，则说明该端口处 于开放状态：如果回复的是RST/ACK包，则说明这个端口处于关闭状态；如果没有任何响应 或者发送了ICMP unreachable信息，则可认为这个端口被屏蔽了。SYN模式的扫描速度非常 好。而且由于这种模式不会进行三次握手，所以是一种十分隐蔽的扫描方式。如果启动Nmap 的用户有高级别权限，那么在默认情况下Nmap程序将以这种模式进行扫描。<br>
+3.TCP NULL（-sN）、FIN（-sF）及XMAS（-sX）扫描：NULL 扫描不设置任何控制位； FIN扫描仅设置FIN标志位：XMAS扫描设置FIN、PSH和URG的标识位。如果目标主机返回 了含有RST标识位的响应数据，则说明该端口处于关闭状态；如果目标主机没有任何回应， 则该端口处于打开｜过滤状态。<br>
+4.TCP Maimon扫描（-sM）：Uriel Maimon 首先发现了TCP Maimom扫描方式。这种模式的 探测数据包含有FIN/ACK标识。对于BSD衍生出来的各种操作系统来说，如果被测端口处于 开放状态，主机将会丢弃这种探测数据包；如果被测端口处于关闭状态，那么主机将会回复 RST。<br>
+5.TCPACK扫描（-sA）：这种扫描模式可以检测目标系统是否采用了数据包状态监测技术 （stateful）防火墙，并能确定哪些端口被防火墙屏蔽。这种类型的数据包只有一个ACK标识 位。如果目标主机的回复中含有RST标识，则说明目标主机没有被过滤。<br>
+6.TCP窗口扫描（-sW）：这种扫描方式检测目标返回的RST数据包的TCP窗口字段。如果目 标端口处于开放状态，这个字段的值将是正值；否则它的值应当是0。<br>
+7.TCP Idle扫描（-sI）：采用这种技术后，您将通过指定的僵尸主机发送扫描数据包。本机 并不与目标主机直接通信。如果对方网络里有IDS，IDS将认为发起扫描的主机是僵尸主机。</p>
 <pre><code>- UDP扫描选项：
 </code></pre>
 <p>Nmap有多种TCP扫描方式，而UDP扫描仅有一种扫描方式（-sU）。虽然UDP扫描结果没有 TCP扫描结果的可靠度高，但渗透测试人员不能因此而轻视UDP扫描，毕竟UDP端口代表着 可能会有价值的服务端程序。但是UDP扫描的最大问题是性能问题。由干Linux内核限制1秒内最多发送一次ICMP Port Unreachable信息。按照这个速度，对一台主机的65536个UDP端口进行完整扫描，总耗时必 定会超过18个小时。<br>
@@ -198,6 +198,15 @@ nmap -p 80,8081 192.168.50.1-253<br>
                 
               </div>
             
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tututu12138.github.io/post/hello-gridea/">
+                  <h3 class="post-title">
+                    Hello world
+                  </h3>
+                </a>
+              </div>
             
 
             
