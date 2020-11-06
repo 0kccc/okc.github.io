@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1604630304087">
+<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1604630598014">
 <link rel="stylesheet" href="https://tututu12138.github.io/styles/main.css">
 
 
@@ -32,10 +32,9 @@
 扫描指定端口： nmap -p 端口 ip
 
 
-
 nmap -p 80 192.168.50.1
 nmap -p 80,8081 192.168.50.1-253
-还可以自定..." />
+还可以自定义..." />
     <meta name="keywords" content="nmap" />
   </head>
   <body>
@@ -45,7 +44,7 @@ nmap -p 80,8081 192.168.50.1-253
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://tututu12138.github.io">
-        <img src="https://tututu12138.github.io/images/avatar.png?v=1604630304087" class="site-logo">
+        <img src="https://tututu12138.github.io/images/avatar.png?v=1604630598014" class="site-logo">
         <h1 class="site-title">tututu12138</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -124,68 +123,69 @@ nmap -p 80,8081 192.168.50.1-253
 <li>扫描对外开放服务：nmap domain/ip<br>
 <img src="https://tututu12138.github.io/post-images/1604629443108.png" alt="" loading="lazy"></li>
 <li>扫描指定端口： nmap -p 端口 ip<br>
-<img src="https://tututu12138.github.io/post-images/1604629450062.png" alt="" loading="lazy"><pre><code></code></pre>
-</li>
+<img src="https://tututu12138.github.io/post-images/1604629450062.png" alt="" loading="lazy"></li>
 </ul>
-<p>nmap -p 80 192.168.50.1<br>
-nmap -p 80,8081 192.168.50.1-253<br>
-还可以自定义端口参数：<br>
--p端口范围：只扫描指定的端口。扫描1-1024号端口，可设定该选项为–p 1-1024。扫描1 〜65535端口时，可使用-p-选项。<br>
--F（快速扫描）：将仅扫描100	个常用端口。<br>
--r（顺序扫描）：指定这个选项后，程序将从按照从小到大的顺序扫描端口。</p>
-<pre><code>
-# 进阶使用：
-- nmap的6种端口状态：
+<pre><code>nmap -p 80 192.168.50.1
+nmap -p 80,8081 192.168.50.1-253
+还可以自定义端口参数：
+-p端口范围：只扫描指定的端口。扫描1-1024号端口，可设定该选项为–p 1-1024。扫描1 〜65535端口时，可使用-p-选项。
+-F（快速扫描）：将仅扫描100	个常用端口。
+-r（顺序扫描）：指定这个选项后，程序将从按照从小到大的顺序扫描端口。
 </code></pre>
-<p>开放：工作于开放端口的服务器端的应用程序可以受理TCP连接、接收UDP数据包或者响 应SCTP（流控制传输协议）请求。<br>
-关闭：虽然我们确实可以访问有关的端口，但是没有应用程序工作于该端口上。<br>
-过滤：Nmap不能确定该端口是否开放。包过滤设备屏蔽了我们向目标发送的探测包。<br>
-未过滤：虽然可以访问到指定端口，但Nmap不能确定该端口是否处于开放状态。<br>
-打开｜过滤：Nmap认为指定端口处于开放状态或过滤状态，但是不能确定处于两者之中的 哪种状态。在遇到没有响应的开放端口时，Nmap会作出这种判断。这可以是由于防火墙丢 弃数据包造成的。<br>
-关闭｜过滤：Nmap认为指定端口处于关闭状态或过滤状态，但是不能确定处于两者之中的 哪种状态。</p>
-<pre><code>## 常用参数：
-- -sV(服务版本识别)
-  ![](https://tututu12138.github.io/post-images/1604629468191.png)
-- -O(操作系统检测)
-  ![](https://tututu12138.github.io/post-images/1604629472695.png)
-- -A(全面扫描)，包含了1-10000端口ping扫描，操作系统扫描，脚本扫描，路由跟踪，服务探测；耗时较长。
-- -Pn(禁用主机检测)，如果主机屏蔽了ping请求，Nmap可能会认为该主机没有开机，就需要禁用Nmap的主机检测功能，也可跳过防火墙。
-- -vv(输出结果)，对扫描结果进行详细的输出。
-  
-# 深入使用(了解一下):
-- TCP扫描：
+<h1 id="进阶使用">进阶使用：</h1>
+<ul>
+<li>nmap的6种端口状态：</li>
+</ul>
+<pre><code>开放：工作于开放端口的服务器端的应用程序可以受理TCP连接、接收UDP数据包或者响 应SCTP（流控制传输协议）请求。
+关闭：虽然我们确实可以访问有关的端口，但是没有应用程序工作于该端口上。
+过滤：Nmap不能确定该端口是否开放。包过滤设备屏蔽了我们向目标发送的探测包。
+未过滤：虽然可以访问到指定端口，但Nmap不能确定该端口是否处于开放状态。 
+打开｜过滤：Nmap认为指定端口处于开放状态或过滤状态，但是不能确定处于两者之中的 哪种状态。在遇到没有响应的开放端口时，Nmap会作出这种判断。这可以是由于防火墙丢 弃数据包造成的。
+关闭｜过滤：Nmap认为指定端口处于关闭状态或过滤状态，但是不能确定处于两者之中的 哪种状态。
 </code></pre>
-<p>1.TCP连接扫描（-sT）：指定这个选项后，程序将和目标主机的每个端口都进行完整的三次 握手。如果成功建立连接，则判定该端口是开放端口。由于在检测每个端口时都需要进行三 次握手，所以这种扫描方式比较慢，而且扫描行为很可能被目标主机记录下来。如果启动 Nmap的用户的权限不足，那么默认情况下Nmap程序将以这种模式进行扫描。<br>
-2.SYN扫描（-sS）：该选项也称为半开连接或者SYN stealth。采用该选项后，Nmap将使用 含有SYN标志位的数据包进行端口探测。如果目标主机回复了SYN/ACK包，则说明该端口处 于开放状态：如果回复的是RST/ACK包，则说明这个端口处于关闭状态；如果没有任何响应 或者发送了ICMP unreachable信息，则可认为这个端口被屏蔽了。SYN模式的扫描速度非常 好。而且由于这种模式不会进行三次握手，所以是一种十分隐蔽的扫描方式。如果启动Nmap 的用户有高级别权限，那么在默认情况下Nmap程序将以这种模式进行扫描。<br>
-3.TCP NULL（-sN）、FIN（-sF）及XMAS（-sX）扫描：NULL 扫描不设置任何控制位； FIN扫描仅设置FIN标志位：XMAS扫描设置FIN、PSH和URG的标识位。如果目标主机返回 了含有RST标识位的响应数据，则说明该端口处于关闭状态；如果目标主机没有任何回应， 则该端口处于打开｜过滤状态。<br>
-4.TCP Maimon扫描（-sM）：Uriel Maimon 首先发现了TCP Maimom扫描方式。这种模式的 探测数据包含有FIN/ACK标识。对于BSD衍生出来的各种操作系统来说，如果被测端口处于 开放状态，主机将会丢弃这种探测数据包；如果被测端口处于关闭状态，那么主机将会回复 RST。<br>
-5.TCPACK扫描（-sA）：这种扫描模式可以检测目标系统是否采用了数据包状态监测技术 （stateful）防火墙，并能确定哪些端口被防火墙屏蔽。这种类型的数据包只有一个ACK标识 位。如果目标主机的回复中含有RST标识，则说明目标主机没有被过滤。<br>
-6.TCP窗口扫描（-sW）：这种扫描方式检测目标返回的RST数据包的TCP窗口字段。如果目 标端口处于开放状态，这个字段的值将是正值；否则它的值应当是0。<br>
-7.TCP Idle扫描（-sI）：采用这种技术后，您将通过指定的僵尸主机发送扫描数据包。本机 并不与目标主机直接通信。如果对方网络里有IDS，IDS将认为发起扫描的主机是僵尸主机。</p>
-<pre><code>- UDP扫描选项：
+<h2 id="常用参数">常用参数：</h2>
+<ul>
+<li>-sV(服务版本识别)<br>
+<img src="https://tututu12138.github.io/post-images/1604629468191.png" alt="" loading="lazy"></li>
+<li>-O(操作系统检测)<br>
+<img src="https://tututu12138.github.io/post-images/1604629472695.png" alt="" loading="lazy"></li>
+<li>-A(全面扫描)，包含了1-10000端口ping扫描，操作系统扫描，脚本扫描，路由跟踪，服务探测；耗时较长。</li>
+<li>-Pn(禁用主机检测)，如果主机屏蔽了ping请求，Nmap可能会认为该主机没有开机，就需要禁用Nmap的主机检测功能，也可跳过防火墙。</li>
+<li>-vv(输出结果)，对扫描结果进行详细的输出。</li>
+</ul>
+<h1 id="深入使用了解一下">深入使用(了解一下):</h1>
+<ul>
+<li>TCP扫描：</li>
+</ul>
+<pre><code>1.TCP连接扫描（-sT）：指定这个选项后，程序将和目标主机的每个端口都进行完整的三次 握手。如果成功建立连接，则判定该端口是开放端口。由于在检测每个端口时都需要进行三 次握手，所以这种扫描方式比较慢，而且扫描行为很可能被目标主机记录下来。如果启动 Nmap的用户的权限不足，那么默认情况下Nmap程序将以这种模式进行扫描。
+2.SYN扫描（-sS）：该选项也称为半开连接或者SYN stealth。采用该选项后，Nmap将使用 含有SYN标志位的数据包进行端口探测。如果目标主机回复了SYN/ACK包，则说明该端口处 于开放状态：如果回复的是RST/ACK包，则说明这个端口处于关闭状态；如果没有任何响应 或者发送了ICMP unreachable信息，则可认为这个端口被屏蔽了。SYN模式的扫描速度非常 好。而且由于这种模式不会进行三次握手，所以是一种十分隐蔽的扫描方式。如果启动Nmap 的用户有高级别权限，那么在默认情况下Nmap程序将以这种模式进行扫描。
+3.TCP NULL（-sN）、FIN（-sF）及XMAS（-sX）扫描：NULL 扫描不设置任何控制位； FIN扫描仅设置FIN标志位：XMAS扫描设置FIN、PSH和URG的标识位。如果目标主机返回 了含有RST标识位的响应数据，则说明该端口处于关闭状态；如果目标主机没有任何回应， 则该端口处于打开｜过滤状态。
+4.TCP Maimon扫描（-sM）：Uriel Maimon 首先发现了TCP Maimom扫描方式。这种模式的 探测数据包含有FIN/ACK标识。对于BSD衍生出来的各种操作系统来说，如果被测端口处于 开放状态，主机将会丢弃这种探测数据包；如果被测端口处于关闭状态，那么主机将会回复 RST。
+5.TCPACK扫描（-sA）：这种扫描模式可以检测目标系统是否采用了数据包状态监测技术 （stateful）防火墙，并能确定哪些端口被防火墙屏蔽。这种类型的数据包只有一个ACK标识 位。如果目标主机的回复中含有RST标识，则说明目标主机没有被过滤。
+6.TCP窗口扫描（-sW）：这种扫描方式检测目标返回的RST数据包的TCP窗口字段。如果目 标端口处于开放状态，这个字段的值将是正值；否则它的值应当是0。
+7.TCP Idle扫描（-sI）：采用这种技术后，您将通过指定的僵尸主机发送扫描数据包。本机 并不与目标主机直接通信。如果对方网络里有IDS，IDS将认为发起扫描的主机是僵尸主机。
 </code></pre>
-<p>Nmap有多种TCP扫描方式，而UDP扫描仅有一种扫描方式（-sU）。虽然UDP扫描结果没有 TCP扫描结果的可靠度高，但渗透测试人员不能因此而轻视UDP扫描，毕竟UDP端口代表着 可能会有价值的服务端程序。但是UDP扫描的最大问题是性能问题。由干Linux内核限制1秒内最多发送一次ICMP Port Unreachable信息。按照这个速度，对一台主机的65536个UDP端口进行完整扫描，总耗时必 定会超过18个小时。<br>
-优化方法：<br>
-1.进行并发的UDP扫描；<br>
-2.优先扫描常用端口；<br>
-3.在防火墙后面扫描；<br>
-4.启用--host-timeout选项以跳过响应过慢的主机。</p>
-<pre><code>- 规避主机检测：
+<ul>
+<li>UDP扫描选项：</li>
+</ul>
+<pre><code>Nmap有多种TCP扫描方式，而UDP扫描仅有一种扫描方式（-sU）。虽然UDP扫描结果没有 TCP扫描结果的可靠度高，但渗透测试人员不能因此而轻视UDP扫描，毕竟UDP端口代表着 可能会有价值的服务端程序。但是UDP扫描的最大问题是性能问题。由干Linux内核限制1秒内最多发送一次ICMP Port Unreachable信息。按照这个速度，对一台主机的65536个UDP端口进行完整扫描，总耗时必 定会超过18个小时。
+优化方法：
+1.进行并发的UDP扫描；
+2.优先扫描常用端口；
+3.在防火墙后面扫描；
+4.启用--host-timeout选项以跳过响应过慢的主机。
 </code></pre>
-<p>如果目标主机通常处于防火墙或IDS系统的保护内，使用Nmap的默认选项进行扫描，可能会被发现并且扫不出任何结果。所以，我们可以使用Nmap自带的绕过检测参数。<br>
--f（使用小数据包）：这个选项可避免对方识别出我们探测的数据包。指定这个选项之后，Nmap将使用8字节甚至更小数据体的数据包。<br>
---mtu：这个选项用来调整数据包的包大小。MTU（Maximum	Transmission Unit，最大传输单元）必须是8的整数倍，否则Nmap将报错。<br>
--D（诱饵）：这个选项应指定假IP(诱饵的IP)。启用这个选项之后，Nmap在发送侦测数据包的时候会掺杂一些源地址是假IP（诱饵）的数据包。这种功能意在以藏木于林的方法 掩盖本机的真实	IP。也就是说，对方的log还会记录下本机的真实IP。您可使用RND生成随机 的假IP地址，或者用RND：number的参数生成<number>个假IP地址。您所指定的诱饵主机 应当在线，否则很容易击溃目标主机。另外，使用了过多的诱饵可能造成网络拥堵。尤其是 在扫描客户的网络的时候，您应当极力避免上述情况。<br>
---source-port <portnumber>或-g（模拟源端口）：如果防火墙只允许某些源端口的入站流量，这个选项就非常有用。<br>
---data-length：这个选项用于改变Nmap	发送数据包的默认数据长度，以避免被识别出来是Nmap的扫描数据。<br>
---max-parallelism：这个选项可限制Nmap并发扫描的最大连接数。<br>
---scan-delay <time>：这个选项用于控制发送探测数据的时间间隔，以避免达到IDS/IPS端口扫描规则的阈值。</p>
-<pre><code>
-
-
-
-
-
+<ul>
+<li>规避主机检测：</li>
+</ul>
+<pre><code>如果目标主机通常处于防火墙或IDS系统的保护内，使用Nmap的默认选项进行扫描，可能会被发现并且扫不出任何结果。所以，我们可以使用Nmap自带的绕过检测参数。
+-f（使用小数据包）：这个选项可避免对方识别出我们探测的数据包。指定这个选项之后，Nmap将使用8字节甚至更小数据体的数据包。
+--mtu：这个选项用来调整数据包的包大小。MTU（Maximum	Transmission Unit，最大传输单元）必须是8的整数倍，否则Nmap将报错。
+-D（诱饵）：这个选项应指定假IP(诱饵的IP)。启用这个选项之后，Nmap在发送侦测数据包的时候会掺杂一些源地址是假IP（诱饵）的数据包。这种功能意在以藏木于林的方法 掩盖本机的真实	IP。也就是说，对方的log还会记录下本机的真实IP。您可使用RND生成随机 的假IP地址，或者用RND：number的参数生成&lt;number&gt;个假IP地址。您所指定的诱饵主机 应当在线，否则很容易击溃目标主机。另外，使用了过多的诱饵可能造成网络拥堵。尤其是 在扫描客户的网络的时候，您应当极力避免上述情况。
+--source-port &lt;portnumber&gt;或-g（模拟源端口）：如果防火墙只允许某些源端口的入站流量，这个选项就非常有用。
+--data-length：这个选项用于改变Nmap	发送数据包的默认数据长度，以避免被识别出来是Nmap的扫描数据。
+--max-parallelism：这个选项可限制Nmap并发扫描的最大连接数。
+--scan-delay &lt;time&gt;：这个选项用于控制发送探测数据的时间间隔，以避免达到IDS/IPS端口扫描规则的阈值。
 </code></pre>
 
             </div>
