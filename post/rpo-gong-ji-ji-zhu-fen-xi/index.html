@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>RPO攻击技术分析 | tututu12138</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1608862949086">
+<link rel="stylesheet" href="https://tututu12138.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="RPO攻击是什么
+RPO全称Relative Path Overwrite(相对路径覆盖)，一种“欺骗”型攻击技术。其原理就是利用服务器与浏览器对URL解析的差异，将页面中使用相对路径引入的静态资源文件解析成其他资源文件或者我们可以控制内容..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tututu12138.github.io">
+        <img src="https://tututu12138.github.io/images/avatar.png?v=1608862949086" class="site-logo">
+        <h1 class="site-title">tututu12138</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/tututu12138" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      突击小分队~
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tututu12138.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">RPO攻击技术分析</h2>
+            <div class="post-date">2020-12-25</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="rpo攻击是什么">RPO攻击是什么</h2>
+<p>RPO全称Relative Path Overwrite(相对路径覆盖)，一种“欺骗”型攻击技术。其原理就是<strong>利用服务器与浏览器对URL解析的差异，将页面中使用相对路径引入的静态资源文件解析成其他资源文件或者我们可以控制内容的页面</strong>，从而导致XSS、任意文件读取、信息泄露等漏洞的产生。</p>
+<h2 id="利用条件">利用条件</h2>
+<ul>
+<li>配置错误的apache服务器(开启AllowEncodedSlashes选项),或者nginx服务器。</li>
+<li>存在相对路径的js或者css的引用</li>
+</ul>
+<h4 id="服务器解析差异">服务器解析差异</h4>
+<p>要利用该漏洞首先得了解不同服务器的解析差异，我们可以通过一个简单的测试来区分服务器对URL的解析差异，现在可以在rpotest目录下创建一个空的test文件夹和一个内容为“I'm rpotest”的test.php文件,当成功访问时会输出该内容。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/rpo.png" alt="" loading="lazy"><br>
+现在分别请求apache和nginx服务器下该链接的访问情况:<strong>http://127.0.0.1/rpotest/xxxxx/..%2Ftest.php</strong></p>
+<ul>
+<li>apache:<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache.png" alt="" loading="lazy"></li>
+<li>nginx:<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/nginx.png" alt="" loading="lazy"><br>
+从上图的访问情况可以看到对于同样的URL,apache和nginx服务器的处理方式是不同的，Apache服务器默认情况下是不解析%2F,也就是说服务器解析处理到xxxxx目录后认为..%2Ftest.php是一个文件，此时没有这个文件的所以返回404；而ngin服务器会先解码%2F为/，请求会变成/rpotest/xxxxx/../test.php，并且../会向前跳转到rpotest目录下，ci此时rpotest目录下有test.php文件，所以成功返回内容。</li>
+</ul>
+<h2 id="漏洞利用">漏洞利用</h2>
+<p>在rpotest目录下创建一个test.php和一个空的rpo.js，test文件夹内创建另一个内容为alert('QAQ')的rpo.js。<br>
+test.php内容：</p>
+<pre><code>&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;rpo攻击测试&lt;/title&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;rpo.js&quot;&gt;&lt;/script&gt; //这里引用相对路径下的rpo.js
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;?php echo &quot;RPO test&quot;; ?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+</code></pre>
+<p>先来看下正常访问test.php时，会加载根目录下的rpo.js(即rpotest目录下这个空的rpo.js)  。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/rpojs.png" alt="" loading="lazy"><br>
+但是当我们访问<strong>http://127.0.0.1/rpotest/test/..%2ftest.php</strong>时会发现该test.php竟然会调用test文件夹下rpo.js然后出现弹框现象？<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/test-js.png" alt="" loading="lazy"><br>
+我们来深度解析一下这一现象具体是怎么实现的：当我们访问http://127.0.0.1/rpotest/test/..%2ftest.php时向服务器发起请求，服务器首先解码%2F然后向上目录跳转即：http://127.0.0.1/rpotest/test.php，  然后返回test.php给浏览器，由浏览器开始处理test.php中的各css、js脚本；但是由于浏览器并不会解码%2F这个符号，所以浏览器加载的还是http://127.0.0.1/rpotest/test/..%2ftest.php这个url，同样的把会把..%2ftest.php当成一个文件，所以当前目录是/test,并且此时test.php引用的相对路径下的rpo.js文件是/test/rpo.js,因此造成弹框！</p>
+<h3 id="特性利用">特性利用</h3>
+<p>如果是开启URL重写的伪静态网站的话(pathinfo模式)，那么漏洞利用将会变得轻而易举了。什么是pathinfo模式？简单举例你一定一看就懂：</p>
+<pre><code>http://xxx.com/news/index.php?test=123
+等同于
+http://xxx.com/news/123.html
+</code></pre>
+<ul>
+<li>apache要开启pathinfo模式:</li>
+</ul>
+<pre><code>&lt;Directory /&gt;
+Options +Indexes +FollowSymLinks +ExecCGI
+AllowOverride All
+Order allow,deny
+Allow from all
+#AcceptPathInfo on   #增加这行配置
+Require all granted
+&lt;/Directory&gt;
+</code></pre>
+<ul>
+<li>nginx增加pathinfo模式配置:</li>
+</ul>
+<pre><code>server {
+        listen       80;
+        server_name  localhost;
+        root   &quot;D:/good&quot;;
+        location / {
+           index  index.html index.htm index.php;
+           autoindex  off;
+           if (!-e $request_filename) {
+              rewrite ^/(.*)  /index.php/$1 last;
+            } 
+        }
+        
+        location ~ \.php(.*)$  {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_index  index.php;
+            fastcgi_split_path_info  ^((?U).+\.php)(/?.+)$;
+            fastcgi_param  SCRIPT_FILENAME       $document_root$fastcgi_script_name;
+            fastcgi_param  PATH_INFO  $fastcgi_path_info;
+            fastcgi_param  PATH_TRANSLATED      $document_root$fastcgi_path_info;
+            include        fastcgi_params;
+        }
+     }
+</code></pre>
+<p>这里我们配置好开启pathinfo模式的apache服务器，测试一下<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/123.png" alt="" loading="lazy"><br>
+创建一个test.php和一个内容alert('QAQ')的1.html文件</p>
+<pre><code>//test.php内容：
+&lt;html&gt;
+    &lt;head&gt;RPO attack test&lt;/head&gt;
+    &lt;body&gt;
+        &lt;script src=&quot;1.js&quot;&gt;&lt;/script&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+&lt;?php
+error_reporting(E_ALL^E_NOTICE^E_WARNING);
+if($_GET['page'])
+{
+    $a=$_GET['page'];
+    Header('Location:http://127.0.0.1/rpotest/test/'.&quot;$a&quot;.'.html');
+}
+?&gt;
+</code></pre>
+<p>然后访问：http://127.0.0.1/rpotest/test.php/page/1/..%2f..%2f..%2ftest.php<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/rpoxss.png" alt="" loading="lazy"><br>
+我们会发现竟然将1.html没有标签的纯文本内容当作javascript语句执行，这是因为和上述一样当浏览器解析到..%2f..%2f..%2ftest.php时把这一堆当作一个文件，然后加载是的http://127.0.0.1/rpotest/test.php/page/1/1.js,而且test.php里面写的请求是<script src="1.js"></script>，所以返回的内容(1.html)会被当成js解析，所以造成了弹框现象。</p>
+<h2 id="漏洞防护">漏洞防护</h2>
+<p>在页面中避免直接使用相对路径进行静态文件的加载。</p>
+<h2 id="总结">总结</h2>
+<p>在实际场景中可能需要网站有可控的未声明的<!DOCTYPE html>输出点，并且使用相对路径的js、css加载方式或者开启pathinfo模式；但如果细心的研究这些利用技巧的话，可能会有意想不到的收获！</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tututu12138.github.io/post/php-yi-ju-hua-fen-xi/">
+                  <h3 class="post-title">
+                    PHP一句话分析
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '3d062d911e59ec4e0804',
+        clientSecret: '790f7f2e530e29016bdac68c460b9f4afd71e62f',
+        repo: 'tututu12138.github.io',
+        owner: 'tututu12138',
+        admin: ['tututu12138'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

