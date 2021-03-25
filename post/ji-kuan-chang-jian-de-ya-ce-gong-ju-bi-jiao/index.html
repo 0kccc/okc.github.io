@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>几款常见的压测工具比较 | tututu12138</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://tututu12138.github.io/favicon.ico?v=1616640153569">
+<link rel="stylesheet" href="https://tututu12138.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="1.ab（Apache Benchmark）
+
+简介
+ab就是Apache Benchmark的缩写，顾名思义它是Apache组织开发的一款web压力测试工具。ab又是一个命令行工具，使用方便，统计功能强大，对发起负载的本机要求很低，根据a..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://tututu12138.github.io">
+        <img src="https://tututu12138.github.io/images/avatar.png?v=1616640153569" class="site-logo">
+        <h1 class="site-title">tututu12138</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/tututu12138" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      突击小分队~
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://tututu12138.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">几款常见的压测工具比较</h2>
+            <div class="post-date">2021-03-25</div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="1abapache-benchmark">1.ab（Apache Benchmark）</h3>
+<ul>
+<li>简介<br>
+ab就是Apache Benchmark的缩写，顾名思义它是Apache组织开发的一款web压力测试工具。ab又是一个命令行工具，使用方便，统计功能强大，对发起负载的本机要求很低，根据ab命令可以创建很多的并发访问线程，模拟多个访问者同时对某一URL地址进行访问，因此可以用来测试目标服务器的负载压力，但是没有图形化结果，不能监控。</li>
+<li>安装</li>
+</ul>
+<pre><code># linux安装
+sudo yum -y install httpd
+# windows安装
+https://www.apachelounge.com/download/ 直接下载解压使用
+</code></pre>
+<ul>
+<li>使用</li>
+</ul>
+<pre><code>Usage: ab [options] [http[s]://]hostname[:port]/path
+用法：ab [选项] 地址
+
+选项：
+Options are:
+    -n requests      #执行的请求数，即一共发起多少请求。
+    -c concurrency   #请求并发数。
+    -s timeout       #指定每个请求的超时时间，默认是30秒。
+    -k               #启用HTTP KeepAlive功能，即在一个HTTP会话中执行多个请求。默认时，不启用KeepAlive功能。
+</code></pre>
+<ul>
+<li>结果<br>
+例如：对baidu.com发起30个请求，并发数为3<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/1.png" alt="" loading="lazy"></li>
+</ul>
+<h3 id="2jmeter">2.jmeter</h3>
+<ul>
+<li>简介<br>
+Apache JMeter是Apache组织开发的基于Java的压力测试工具，在很多场合如个人测试，企业测试中都有广泛应用。</li>
+<li>安装<br>
+直接访问<a href="http://jmeter.apache.org/download_jmeter.cgi">http://jmeter.apache.org/download_jmeter.cgi</a>下载解压使用<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/2.png" alt="" loading="lazy"></li>
+<li>使用<br>
+JMeter使用功能强大，这里我以简单的测试例子来做下介绍<br>
+添加线程组<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/3.png" alt="" loading="lazy"><br>
+设置线程组参数<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/4.png" alt="" loading="lazy"><br>
+在线程租添加HTTP请求<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/5.png" alt="" loading="lazy"><br>
+设置HTTP请求详细信息<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/6.png" alt="" loading="lazy"><br>
+可以在该HTTP请求下添加运行结果监视器<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/7.png" alt="" loading="lazy"><br>
+运行<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/8.png" alt="" loading="lazy"></li>
+<li>结果<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/9.png" alt="" loading="lazy"><br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/10.png" alt="" loading="lazy"><br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/11.png" alt="" loading="lazy"></li>
+</ul>
+<h3 id="3locust">3.locust</h3>
+<ul>
+<li>简介<br>
+locust是非常简单易用、分布式、python开发的压力测试工具。支持分布式测试，跨平台、易扩展，有图形化界面，可以快捷操作和下载报告。</li>
+<li>安装</li>
+</ul>
+<pre><code># 支持的python版本：2.7、3.X
+# pip3 安装locust
+pip3  install locust
+# 查看是否安装成功
+locust -h
+# 运行 Locust 分布在多个进程/机器库
+pip3 install pyzmq
+# webSocket 压测库
+pip3 install websocket-client
+</code></pre>
+<ul>
+<li>使用<br>
+编写压测脚本<strong>ceshi.py</strong></li>
+</ul>
+<pre><code>from locust import HttpLocust, TaskSet, task
+
+# 定义用户行为
+class UserBehavior(TaskSet):
+
+    @task
+    def baidu_index(self):
+        self.client.get(&quot;/&quot;)
+
+
+class WebsiteUser(HttpLocust):
+    task_set = UserBehavior # 指向一个定义的用户行为类
+    min_wait = 3000 # 执行事务之间用户等待时间的下界（单位：毫秒）
+    max_wait = 6000 # 执行事务之间用户等待时间的上界（单位：毫秒）
+</code></pre>
+<p>简单的运行</p>
+<pre><code>locust -f locust测试脚本.py --host=URL地址
+</code></pre>
+<p>访问 http://localhost:8089 进入压测首页,点击start swarming进入压测界面<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/12.png" alt="" loading="lazy"></p>
+<ul>
+<li>结果<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/13.png" alt="" loading="lazy"></li>
+</ul>
+<h2 id="比较">比较：</h2>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ab</th>
+<th>Jmeter</th>
+<th>locust</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>使用语言</td>
+<td>C</td>
+<td>Java</td>
+<td>Python</td>
+</tr>
+<tr>
+<td>图形界面</td>
+<td>无</td>
+<td>有</td>
+<td>有</td>
+</tr>
+<tr>
+<td>优势</td>
+<td>使用简单，上手学习较快，提供需要的基本性能指标</td>
+<td>功能强大，插件丰富，支持生成HTML报告</td>
+<td>支持分布式、压测数据支持导出</td>
+</tr>
+</tbody>
+</table>
+<h2 id="参考">参考：</h2>
+<p>https://docs.locust.io/en/stable/<br>
+https://httpd.apache.org/docs/2.2/programs/ab.html<br>
+https://jmeter.apache.org/usermanual/get-started.html</p>
+<p>直接看详细的：<br>
+https://segmentfault.com/a/1190000020211494</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://tututu12138.github.io/post/rpo-gong-ji-ji-zhu-fen-xi/">
+                  <h3 class="post-title">
+                    RPO攻击技术分析
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '3d062d911e59ec4e0804',
+        clientSecret: '790f7f2e530e29016bdac68c460b9f4afd71e62f',
+        repo: 'tututu12138.github.io',
+        owner: 'tututu12138',
+        admin: ['tututu12138'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
