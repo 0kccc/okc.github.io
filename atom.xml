@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://tututu12138.github.io</id>
     <title>tututu12138</title>
-    <updated>2021-03-25T02:42:50.549Z</updated>
+    <updated>2021-03-25T02:44:11.215Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://tututu12138.github.io"/>
     <link rel="self" href="https://tututu12138.github.io/atom.xml"/>
@@ -150,8 +150,6 @@ class WebsiteUser(HttpLocust):
 <p>https://docs.locust.io/en/stable/<br>
 https://httpd.apache.org/docs/2.2/programs/ab.html<br>
 https://jmeter.apache.org/usermanual/get-started.html</p>
-<p>直接看详细的：<br>
-https://segmentfault.com/a/1190000020211494</p>
 ]]></content>
     </entry>
     <entry>
