@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://0kccc.github.io</id>
-    <title>tututu12138</title>
-    <updated>2021-03-25T03:03:26.349Z</updated>
+    <title>okc</title>
+    <updated>2021-03-25T03:08:27.706Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://0kccc.github.io"/>
     <link rel="self" href="https://0kccc.github.io/atom.xml"/>
     <subtitle>突击小分队~</subtitle>
     <logo>https://0kccc.github.io/images/avatar.png</logo>
     <icon>https://0kccc.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, tututu12138</rights>
+    <rights>All rights reserved 2021, okc</rights>
     <entry>
         <title type="html"><![CDATA[几款常见的压测工具比较]]></title>
         <id>https://0kccc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/</id>
