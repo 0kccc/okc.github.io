@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://0kc.github.io</id>
+    <id>https://0kccc.github.io</id>
     <title>okc</title>
-    <updated>2021-04-14T06:26:30.075Z</updated>
+    <updated>2021-04-14T06:53:10.341Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://0kc.github.io"/>
-    <link rel="self" href="https://0kc.github.io/atom.xml"/>
+    <link rel="alternate" href="https://0kccc.github.io"/>
+    <link rel="self" href="https://0kccc.github.io/atom.xml"/>
     <subtitle>突击小分队~</subtitle>
-    <logo>https://0kc.github.io/images/avatar.png</logo>
-    <icon>https://0kc.github.io/favicon.ico</icon>
+    <logo>https://0kccc.github.io/images/avatar.png</logo>
+    <icon>https://0kccc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, okc</rights>
     <entry>
         <title type="html"><![CDATA[几款常见的压测工具比较]]></title>
-        <id>https://0kc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/</id>
-        <link href="https://0kc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/">
+        <id>https://0kccc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/</id>
+        <link href="https://0kccc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/">
         </link>
         <updated>2021-03-25T02:42:00.000Z</updated>
         <content type="html"><![CDATA[<h3 id="1abapache-benchmark">1.ab（Apache Benchmark）</h3>
@@ -154,8 +154,8 @@ https://jmeter.apache.org/usermanual/get-started.html</p>
     </entry>
     <entry>
         <title type="html"><![CDATA[RPO攻击技术分析]]></title>
-        <id>https://0kc.github.io/post/rpo-gong-ji-ji-zhu-fen-xi/</id>
-        <link href="https://0kc.github.io/post/rpo-gong-ji-ji-zhu-fen-xi/">
+        <id>https://0kccc.github.io/post/rpo-gong-ji-ji-zhu-fen-xi/</id>
+        <link href="https://0kccc.github.io/post/rpo-gong-ji-ji-zhu-fen-xi/">
         </link>
         <updated>2020-12-25T02:21:57.000Z</updated>
         <content type="html"><![CDATA[<h2 id="rpo攻击是什么">RPO攻击是什么</h2>
@@ -270,8 +270,8 @@ if($_GET['page'])
     </entry>
     <entry>
         <title type="html"><![CDATA[PHP一句话分析]]></title>
-        <id>https://0kc.github.io/post/php-yi-ju-hua-fen-xi/</id>
-        <link href="https://0kc.github.io/post/php-yi-ju-hua-fen-xi/">
+        <id>https://0kccc.github.io/post/php-yi-ju-hua-fen-xi/</id>
+        <link href="https://0kccc.github.io/post/php-yi-ju-hua-fen-xi/">
         </link>
         <updated>2020-11-18T06:14:33.000Z</updated>
         <content type="html"><![CDATA[<h1 id="webshell含义">Webshell含义</h1>
@@ -476,17 +476,17 @@ $____($_[$__]);
     </entry>
     <entry>
         <title type="html"><![CDATA[nmap使用详解]]></title>
-        <id>https://0kc.github.io/post/nmap-shi-yong-xiang-jie/</id>
-        <link href="https://0kc.github.io/post/nmap-shi-yong-xiang-jie/">
+        <id>https://0kccc.github.io/post/nmap-shi-yong-xiang-jie/</id>
+        <link href="https://0kccc.github.io/post/nmap-shi-yong-xiang-jie/">
         </link>
         <updated>2020-11-06T02:13:06.000Z</updated>
-        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://0kc.github.io/post-images/1604629436980.png" alt="" loading="lazy"></figure>
+        <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://0kccc.github.io/post-images/1604629436980.png" alt="" loading="lazy"></figure>
 <h1 id="简单使用">简单使用：</h1>
 <ul>
 <li>扫描对外开放服务：nmap domain/ip<br>
-<img src="https://0kc.github.io/post-images/1604629443108.png" alt="" loading="lazy"></li>
+<img src="https://0kccc.github.io/post-images/1604629443108.png" alt="" loading="lazy"></li>
 <li>扫描指定端口： nmap -p 端口 ip<br>
-<img src="https://0kc.github.io/post-images/1604629450062.png" alt="" loading="lazy"></li>
+<img src="https://0kccc.github.io/post-images/1604629450062.png" alt="" loading="lazy"></li>
 </ul>
 <pre><code>nmap -p 80 192.168.50.1
 nmap -p 80,8081 192.168.50.1-253
@@ -509,9 +509,9 @@ nmap -p 80,8081 192.168.50.1-253
 <h2 id="常用参数">常用参数：</h2>
 <ul>
 <li>-sV(服务版本识别)<br>
-<img src="https://0kc.github.io/post-images/1604629468191.png" alt="" loading="lazy"></li>
+<img src="https://0kccc.github.io/post-images/1604629468191.png" alt="" loading="lazy"></li>
 <li>-O(操作系统检测)<br>
-<img src="https://0kc.github.io/post-images/1604629472695.png" alt="" loading="lazy"></li>
+<img src="https://0kccc.github.io/post-images/1604629472695.png" alt="" loading="lazy"></li>
 <li>-A(全面扫描)，包含了1-10000端口ping扫描，操作系统扫描，脚本扫描，路由跟踪，服务探测；耗时较长。</li>
 <li>-Pn(禁用主机检测)，如果主机屏蔽了ping请求，Nmap可能会认为该主机没有开机，就需要禁用Nmap的主机检测功能，也可跳过防火墙。</li>
 <li>-vv(输出结果)，对扫描结果进行详细的输出。</li>
@@ -554,8 +554,8 @@ nmap -p 80,8081 192.168.50.1-253
     </entry>
     <entry>
         <title type="html"><![CDATA[Hello world]]></title>
-        <id>https://0kc.github.io/post/hello-gridea/</id>
-        <link href="https://0kc.github.io/post/hello-gridea/">
+        <id>https://0kccc.github.io/post/hello-gridea/</id>
+        <link href="https://0kccc.github.io/post/hello-gridea/">
         </link>
         <updated>2018-12-11T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>👏  欢迎使用 <strong>Gridea</strong> ！<br>
