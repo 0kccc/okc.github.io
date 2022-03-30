@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://0kccc.github.io</id>
     <title>okc</title>
-    <updated>2022-03-30T03:03:03.949Z</updated>
+    <updated>2022-03-30T03:12:49.564Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://0kccc.github.io"/>
     <link rel="self" href="https://0kccc.github.io/atom.xml"/>
@@ -16,7 +16,7 @@
         <link href="https://0kccc.github.io/post/wei-shou-quan-fang-wen-lou-dong-da-he-ji/">
         </link>
         <updated>2022-03-30T02:59:02.000Z</updated>
-        <content type="html"><![CDATA[<p>[TOC]</p>
+        <content type="html"><![CDATA[<p>🚩[TOC]</p>
 <h2 id="0x01-前言">0x01 前言</h2>
 <p>未授权访问漏洞是一个在企业内部非常常见的问题，通常是由于认证存在缺陷、无认证或安全配置不当导致。常见于服务端口，接口未限制开放，网页功能通过链接无限制用户访问，低权限用户越权访问高权限功能。由于此类漏洞的攻击成本极低，效果明显，影响巨大，因此此类漏洞必须引起我们的高度重视。</p>
 <h2 id="0x02-常见应用服务的未授权访问">0x02 常见应用/服务的未授权访问</h2>
