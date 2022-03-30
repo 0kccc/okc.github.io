@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>常用Web中间件漏洞总结 | okc</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://0kccc.github.io/favicon.ico?v=1648609156081">
+<link rel="stylesheet" href="https://0kccc.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="一、简介
+工作中我们比较常用的web中间件有IIS、Apache、Nginx、Tomcat、JBoss、Weblogic、GlassFish、WebSphere、jetty等等，其中因为版本过旧、配置不当等因素会导致我们的网站存在不同程度的..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://0kccc.github.io">
+        <img src="https://0kccc.github.io/images/avatar.png?v=1648609156081" class="site-logo">
+        <h1 class="site-title">okc</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/0kccc" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      突击小分队233~
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://0kccc.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">常用Web中间件漏洞总结</h2>
+            <div class="post-date">2022-03-30</div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="一-简介">一、简介</h2>
+<p>工作中我们比较常用的web中间件有IIS、Apache、Nginx、Tomcat、JBoss、Weblogic、GlassFish、WebSphere、jetty等等，其中因为版本过旧、配置不当等因素会导致我们的网站存在不同程度的安全隐患；因此，熟悉这些中间件漏洞产生的原理对于保护我们网站的安全起关键性作用！</p>
+<h2 id="二-中间件漏洞">二、中间件漏洞</h2>
+<h3 id="1iis">1.IIS</h3>
+<ul>
+<li><strong>1.1 IIS 5.x-6.x解析漏洞</strong><br>
+使用iis5.x-6.x版本的服务器，大多为windows server 2003，网站比较古老，开发语句一般为asp；该解析漏洞也只能解析asp文件，而不能解析aspx文件。<br>
+<strong>漏洞原理：</strong><br>
+基于文件名，该版本默认会将“*.asp;.jpg”此种格式的文件名，当成asp解析，原理是 服务器默认不解析;号及其后面的内容，相当于截断。</li>
+</ul>
+<pre><code>例如：www.xxx.com/xx.asp;.jpg
+</code></pre>
+<p>基于文件夹名，该版本默认会将“*.asp/”目录下的所有文件当成asp解析。</p>
+<pre><code>例如：www.xxx.com/xx.asp/xx.jpg
+</code></pre>
+<p>此外，该版本除了会将扩展名为.asp的文件解析为asp之外，还默认会将扩展名为.asa，.cdx，.cer的文件解析为asp文件。<br>
+<strong>修复方案：</strong><br>
+(1).限制上传目录执行权限，不允许执行脚本；<br>
+(2).不允许新建目录；<br>
+(3).利用正则阻止上传xx.asp;.jpg类型的文件名，上传的文件需经过重命名(时间戳+随机数+.jpg等)。</p>
+<ul>
+<li><strong>1.2 IIS 7.5解析漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+IIS7.5的漏洞与nginx解析漏洞的类似，都是由于php配置文件中，开启了“cgi.fix_pathinfo”，而这并不是nginx或者iis7.5本身的漏洞；php.ini里如果默认“cgi.fix_pathinfo=1”，就会将后缀名为.php的路径当做php文件进行解析。</li>
+</ul>
+<pre><code>#例如url
+http://127.0.0.1/upload/test.jpg
+#在test.jpg路径下加上.php格式访问，就会把原test.jpg解析为test.php
+http://127.0.0.1/upload/test.jpg/.php
+
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/IIS7.5.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).配置cgi.pathinfo(php.ini中)为0并重启php-cgi程序;<br>
+(2).在”Handler Mapping”勾选php-cgi.exe程序的”Invoke handler only if request is mapped to”;</p>
+<ul>
+<li><strong>1.3 IIS PUT漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+IIS6.0 Server在Web服务扩展中开启WebDAV，配置了可以写入权限，造成任意文件上传。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/iisput.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+关闭WebDAV和写入权限。</li>
+<li><strong>1.4 IIS 远程代码执行漏洞(CVE-2017-7269)</strong><br>
+<strong>漏洞原理：</strong><br>
+Microsoft Windows Server 2003 R2中的Internet信息服务（IIS）6.0中的WebDAV服务中的ScStoragePathFromUrl函数中的缓冲区溢出允许远程攻击者通过以”If：&lt;http：//“开头的长标头执行任意代码PROPFIND请求。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/CVE-2017-7269.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+关闭 WebDAV</li>
+<li><strong>1.5 IIS HTTP.SYS远程代码执行(MS15-034)</strong><br>
+<strong>漏洞原理：</strong><br>
+远程执行代码漏洞存在于HTTP协议堆栈(HTTP.sys)中，当HTTP.sys未正确分析经特殊设计的HTTP请求时会导致此漏洞，成功利用此漏洞的攻击者可以在系统帐户的上下文中执行任意代码。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/MS15-034.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+安装修复补丁（KB3042553）</li>
+</ul>
+<h3 id="2apache">2.Apache</h3>
+<ul>
+<li><strong>2.1 Apache多后缀解析漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Apache默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在mime.types文件内），则继续向左识别，直到识别到合法后缀才进行解析；利用这个特性，将会造成一个可以绕过上传白名单的解析漏洞。</li>
+</ul>
+<pre><code>例如：http://127.0.0.1/phpinfo.php.xxx
+## 由于向左解析准则，.xxx不是可识别的文件格式，phpinfo.php.xxx会解析成phpinfo.php  
+以下配置问题也会导致解析漏洞：
+（1）如果配置有AddHandler php5-script .php，这时只要文件名里包含.php，如test2.php.jpg，也会以php来执行。
+（2）如果配置有AddType application/x-httpd-php .jpg 即使扩展名是.jpg，一样能以 php 方式执行。
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache%E8%A7%A3%E6%9E%90.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).apache配置文件，禁止.php这样的文件执行;</p>
+<pre><code> &lt;Files ~ “.(php.|php3.)”&gt; 
+         Order Allow,Deny 
+         Deny from all 
+ &lt;/Files&gt;
+</code></pre>
+<p>(2).用伪静态重写类似.php.*这类文件，在httpd.conf找到LoadModule rewrite_module modules/mod_rewrite.so,把注释去掉重启apache,在网站根目录建立.htaccess文件,代码如下:</p>
+<pre><code>&lt;IfModule mod_rewrite.c&gt;
+RewriteEngine On
+RewriteRule .(php.|php3.) /index.php
+RewriteRule .(pHp.|pHp3.) /index.php
+RewriteRule .(phP.|phP3.) /index.php
+RewriteRule .(Php.|Php3.) /index.php
+RewriteRule .(PHp.|PHp3.) /index.php
+RewriteRule .(PhP.|PhP3.) /index.php
+RewriteRule .(pHP.|pHP3.) /index.php
+RewriteRule .(PHP.|PHP3.) /index.php
+&lt;/IfModule&gt;
+</code></pre>
+<ul>
+<li><strong>2.2 Apache换行解析漏洞(CVE-2017-15715)</strong><br>
+<strong>漏洞原理：</strong><br>
+Apache HTTPD是一款HTTP服务器，它可以通过mod_php来运行PHP网页在2.4.0~2.4.29版本存在一个解析漏洞，在解析php时，1.php\x0A将按照php后缀进行解析，导致绕过一些服务器的安全策略。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/Apache%E6%8D%A2%E8%A1%8C.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).升级到最新版本;<br>
+(2).将上传的文件重命名为为时间戳+随机数+.jpg的格式并禁用上传文件目录执行脚本权限。</li>
+<li><strong>2.3 Apache目录遍历漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+当客户端访问到一个目录时，Apache服务器将会默认寻找一个index list中的文件，若文 件不存在，则会列出当前目录下所有文件或返回403状态码，而列出目录下所有文件的行为称为目录遍历。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86.png" alt="" loading="lazy"><br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%862.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+在httpd.conf中讲“+Indexes”修改为“-Indexes”，禁止目录浏览</li>
+</ul>
+<h3 id="3nginx">3.Nginx</h3>
+<ul>
+<li><strong>3.1 Nginx解析漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Nginx默认是以CGI的方式支持PHP解析的，普遍的做法是在Nginx配置文件中通过正则匹配设置SCRIPT_FILENAME,然后将SCRIPT_FILENAME传递给PHP CGI，如访问网站http://xxx.com/phpinfo.jpg/1.php，匹配到的SCRIPT_FILENAME应该是1.php，如果开启了fix_pathinfo参数，那么就会触发在PHP中的如下逻辑：PHP认为SCRIPT_FILENAME是phpinfo.jpg，而1.php是PATH_INFO，所以就会将phpinfo.jpg作为PHP文件来解析了。</li>
+</ul>
+<pre><code>常见的解析形式：
+www.xxxx.com/UploadFiles/image/1.jpg/1.php
+www.xxxx.com/UploadFiles/image/1.jpg%00.php
+www.xxxx.com/UploadFiles/image/1.jpg/%20\\0.php
+xxx.jpg%00.php (Nginx &lt;8.03空字节代码执行漏洞)
+</code></pre>
+<p><strong>修复方案：</strong><br>
+(1).修改php.ini文件，将cgi.fix_pathinfo的值设置为0;<br>
+(2).在Nginx配置文件中添加以下代码：</p>
+<pre><code> if ( $fastcgi_script_name ~ ..*/.*php ) {
+ return 403;
+ }
+ ##当匹配到类似test.jpg/a.php的URL时，将直接返回403错误代码
+</code></pre>
+<ul>
+<li><strong>3.2 Nginx目录遍历漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Nginx的目录遍历与apache一样,属于配置方面的问题,nginx.conf错误的配置可导致目录遍历与源码泄露；错误配置如下：</li>
+</ul>
+<pre><code>location / {
+    autoindex on;
+    root html;
+    index index.html index.htm;
+    }
+</code></pre>
+<p><strong>修复方案：</strong><br>
+在/usr/local/nginx/conf/nginx.conf位置中修改autoindex off,或者删除autoindex on。</p>
+<ul>
+<li><strong>3.3 Nginx CRLF注入漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+CRLF是“回车+换行”（\r\n)键的简称，HTTPHeader与HTTPBody时用两个CRLF分隔的，浏览器根据两个CRLF来取出HTTP内容并显示出来，通过控制HTTP消息头中的字符，注入恶意换行，就能注入一些会话cookie或者html代码，由于nginx.conf配置不正确，导致注入的代码会被执行。<br>
+在用nginx访问一个链接时，会用https协议访问，并且返回一个302found给用户，其中的$uri是我们可以控制的，通过注入一个CRLF和两个CRLF来选择注入到http header还是http body。</li>
+</ul>
+<pre><code>##错误配置如下：
+location / {
+    try_files $uri $uri/ =404;
+    #autoindex on;
+    #alias /home/;
+    return 302 https://$host$uri;
+    }
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/nginxCRLF%E6%B3%A8%E5%85%A5.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+Nginx的配置文件/etc/nginx/conf.d/error1.conf修改为使用不解码的url跳转。</p>
+<ul>
+<li><strong>3.4 Nginx目录穿越漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Nginx在配置别名(Alias)时/files配置为/home/的别名,那么当我们访问/files../时,nginx实际处理的路径时/home/../,从而实现了穿越目录。</li>
+</ul>
+<pre><code>server {
+    listen      80;
+    server_name localhost;
+location /files {
+   autoindex on;
+   alias /home/;
+   }
+}
+</code></pre>
+<p><strong>修复方案：</strong><br>
+修改/usr/local/nginx/conf/nginx.conf，使用/闭合/files,形成/files/。</p>
+<h3 id="4tomcat">4.Tomcat</h3>
+<ul>
+<li><strong>4.1 Tomcat文件包含漏洞(CVE-2020-1938)</strong><br>
+<strong>漏洞原理：</strong><br>
+该漏洞是由于Tomcat AJP协议存在缺陷而导致，攻击者利用该漏洞可通过构造特定参数，读取服务器webapp下的任意文件，如:webapp配置文件或源代码等。若目标服务器同时存在文件上传功能，攻击者可进一步实现远程代码执行。</li>
+</ul>
+<pre><code>## 影响版本：
+Apache Tomcat 6.x
+Apache Tomcat 7.x &lt; 7.0.100
+Apache Tomcat 8.x &lt; 8.5.51
+Apache Tomcat 9.x &lt; 9.0.31
+</code></pre>
+<figure data-type="image" tabindex="1"><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/tomcat%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB.png" alt="" loading="lazy"></figure>
+<p><strong>修复方案：</strong><br>
+(1).禁用AJP协议；</p>
+<pre><code>&lt;Connector port=&quot;8009&quot;protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; /&gt;
+</code></pre>
+<p>(2).升级到tomcat对应安全版本；<br>
+(3).配置secret来设置AJP协议的认证凭证，如：</p>
+<pre><code>&lt;Connector port=&quot;8009&quot;protocol=&quot;AJP/1.3&quot; redirectPort=&quot;8443&quot; address=&quot;YOUR_TOMCAT_IP_ADDRESS&quot; secret=&quot;YOUR_TOMCAT_AJP_SECRET&quot;/&gt;
+</code></pre>
+<ul>
+<li><strong>4.2 Tomcat后台弱口令&amp;&amp;部署war包RCE漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Tomcat默认后台存在弱口令，可被暴力破解手段破解；且Tomcat支持在后台部署war文件，可以直接将webshell部署到web目录下，直接获取服务器权限。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/tomcat%E5%BC%B1%E5%8F%A3%E4%BB%A4.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).修改后台默认密码，在系统上以低权限运行Tomcat应用程序,创建一个专门的Tomcat服务用户，该用户只能拥有一组最小权限（例如不允许远程登录）；<br>
+(2).增加对于本地和基于证书的身份验证，部署账户锁定机制（对于集中式认证，目录服务也要做相应配置），在CATALINA_HOME/conf/web.xml文件设置锁定机制和时间超时限制；<br>
+(3).以及针对manager-gui/manager-status/manager-script等目录页面设置最小权限访问限制。</li>
+<li><strong>4.3 Tomcat远程代码执行漏洞(CVE-2017-12615)</strong><br>
+<strong>漏洞原理：</strong><br>
+当7.0.0 - 7.0.81版本的Tomcat运行在Windows主机上，且启用了HTTP PUT请求方法，攻击者通过构造的攻击请求向服务器上传包含任意代码的JSP文件，造成任意代码执行。<br>
+Tomcat的Servlet是在conf/web.xml配置的，通过配置文件可知，当后缀名为.jsp和.jspx的时候，是通过JspServlet处理请求的；而其他的静态文件是通过DefaultServlet处理的，例如“1.jsp ”（末尾有空格）并不能匹配到JspServlet，而是会交由DefaultServlet去处理；当处理PUT请求时,会调用resources.bind：dirContext为FileDirContext调用rebind创建文件,又由于Windows不允许空格作为文件名结尾，所以会创建一个.jsp 文件，导致代码执行。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/CVE-2017-12615.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).配置readonly值为True或注释参数，禁止使用PUT方法并重启tomcat;<br>
+(2).根据官方补丁升级最新版本。</li>
+<li><strong>4.4 Tomcat远程代码执行漏洞(CVE-2019-0232)</strong><br>
+<strong>漏洞原理：</strong><br>
+该漏洞只对Windows平台有效，攻击者向CGI Servlet发送请求，可在具有Apache Tomcat权限的系统上注入和执行任意操作系统命令。漏洞成因是当将参数从JRE传递到Windows环境时，由于CGI_Servlet中的输入验证错误而存在该漏洞。</li>
+</ul>
+<pre><code>## 影响版本
+Apache Tomcat 9.0.0.M1 ~ 9.0.17
+Apache Tomcat 8.5.0 ~ 8.5.39
+Apache Tomcat 7.0.0 ~ 7.0.93
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/CVE-2019-0232.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).禁用enableCmdLineArguments参数;<br>
+(2).在conf/web.xml中覆写采用更严格的参数合法性检验规则;<br>
+(3).升级到对应的安全版本。</p>
+<h3 id="5jboss">5.JBoss</h3>
+<ul>
+<li><strong>5.1 Jboss4.x JMX Console未授权访问漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Jboxx4.x的/jmx-console/后台存在未授权访问,此漏洞主要是由于JBoss中/jmx-console/HtmlAdaptor路径对外开放，并且没有任何身份验证机制，导致攻击者可以进⼊到jmx控制台，并在其中执行任何功能,可直接部署war包Getshell。<br>
+<strong>修复方案：</strong><br>
+(1).关闭或禁止对外开放jmx-console和web-console；<br>
+(2).限制访问来源ip。</li>
+<li><strong>5.2 Jboss4.x JMX Console HtmlAdaptor RCE漏洞(CVE-2007-1036)</strong><br>
+<strong>漏洞原理：</strong><br>
+基于未授权访问的基础上，该漏洞利用的是后台中【jboss.admin】-&gt;【DeploymentFileRepository】-&gt;【store()】方法，通过向四个参数传入信息，达到上传shell的目的，其中arg0传入的是部署的war包名字，arg1传入的是上传的文件的文件名，arg2传入的是上传文件的文件格式，arg3传入的是上传文件中的内容；通过控制这四个参数即可上传shell，控制整台服务器。<br>
+具有相同特点的还有CVE-2007-1036和CVE-2006-5750漏洞。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2007-1036.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).禁止对外开放后台jmx-console；<br>
+(2).升级到安全版本。</li>
+<li><strong>5.3 Jboss4.x MQ JMS反序列化漏洞(CVE-2017-7504)</strong><br>
+<strong>漏洞原理：</strong><br>
+JBoss AS 4.x及之前版本中，JbossMQ实现过程的JMS over HTTP Invocation Layer的HTTPServerILServlet.java⽂件存在反序列化漏洞，远程攻击者可借助特制的序列化数据利⽤该漏洞执行任意代码。<br>
+<strong>修复方案：</strong><br>
+(1).将JBoss版本升级到最新；<br>
+(2).尽量不要将JBoss映射到公网。</li>
+<li><strong>5.4 JBoss6.x JMXInvokerServlet反序列化漏洞(CVE-2015-7501)</strong><br>
+<strong>漏洞原理：</strong><br>
+JBoss6.x版本在/invoker/JMXInvokerServlet请求中读取了用户传入的对象，然后我们可以利用Apache Commons Collections中的Gadget执行任意代码；由于JBoss中的invoker/JMXInvokerServlet路径默认是对外开放，所以JBoss的jmx组件⽀持Java反序列化。</li>
+</ul>
+<pre><code>## 影响范围：
+JBoss Enterprise Application Platform 6.4.4,5.2.0,4.3.0_CP10
+JBoss AS (Wildly) 6 and earlier
+JBoss A-MQ 6.2.0
+JBoss Fuse 6.2.0
+JBoss SOA Platform (SOA-P) 5.3.1
+JBoss Data Grid (JDG) 6.5.0
+JBoss BRMS (BRMS) 6.1.0
+JBoss BPMS (BPMS) 6.1.0
+JBoss Data Virtualization (JDV) 6.1.0
+JBoss Fuse Service Works (FSW) 6.0.0
+JBoss Enterprise Web Server (EWS) 2.1,3.0
+</code></pre>
+<p><strong>修复方案：</strong><br>
+(1).安装对应补丁https://access.redhat.com/security/cve/cve-2015-7501；<br>
+(2).升级到最新版本。</p>
+<ul>
+<li><strong>5.5 JBoss 5.x/6.x反序列化漏洞(CVE-2017-12149)</strong><br>
+<strong>漏洞原理：</strong><br>
+该漏洞为Java反序列化错误类型，存在于Jboss的HttpInvoker组件中的ReadOnlyAccessFilter过滤器中。该过滤器在没有进行任何安全检查的情况下尝试将来自客户端的数据流进行反序列化，从而导致了漏洞；该漏洞出现在/invoker/readonly请求中，服务器将用户提交的POST内容进行了Java反序列化,导致传入的携带恶意代码的序列化数据执行。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2017-12149.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).不需要 http-invoker.sar 组件的用户可直接删除此组件；<br>
+(2).添加如下代码至http-invoker.sar下web.xml的security-constraint标签中；</li>
+</ul>
+<pre><code>&lt;url-pattern&gt;/*&lt;/url-pattern
+</code></pre>
+<p>(3).建议用户升级到JBOSS AS7。</p>
+<h3 id="6weblogic">6.Weblogic</h3>
+<ul>
+<li><strong>6.1 Weblogic XML Decoder反序列化漏洞(CVE-2017-10271)</strong><br>
+<strong>漏洞原理：</strong><br>
+Weblogic的WLS Security组件对外提供webservice服务，其中使用了XMLDecoder来解析用户传入的XML数据，在解析的过程中出现反序列化漏洞，导致可执行任意命令。攻击者发送精心构造的xml数据甚至能通过反弹shell拿到权限。</li>
+</ul>
+<pre><code>## 影响版本：
+Weblogic 10.3.6.0.0
+Weblogic 12.1.3.0.0
+Weblogic 12.2.1.1.0
+Weblogic 12.2.1.2.0
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2017-10271.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).下载安全补丁http://www.oracle.com/technetwork/security-advisory/cpuoct2017-3236626.html；<br>
+(2).根据实际环境路径，删除WebLogicwls-wsat组件，删除相关文件后重启weblogic，保证访问wls-wsat/ 提示404错误。</p>
+<ul>
+<li><strong>6.2 Weblogic 任意文件上传漏洞(CVE-2019-2618)</strong><br>
+<strong>漏洞原理：</strong><br>
+该漏洞主要是利用了WebLogic组件中的DeploymentService接口，该接口支持向服务器上传任意文件。攻击者突破了OAM（Oracle Access Management）认证，设置wl_request_type参数为app_upload，构造文件上传格式的POST请求包，上传jsp木马文件，进而可以获得整个服务器的权限。</li>
+</ul>
+<pre><code>## 影响版本：
+Weblogic 10.3.6.0
+Weblogic 12.1.3.0
+Weblogic 12.2.1.3
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2019-2618.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+下载安装官方补丁https://www.oracle.com/technetwork/security-advisory/cpuapr2019-5072813.html</p>
+<ul>
+<li><strong>6.3 Weblogic 未授权远程命令执行漏洞(CVE-2020-14882、14883)</strong><br>
+<strong>漏洞原理：</strong><br>
+未经身份验证的远程攻击者可能通过构造特殊的HTTP GET请求，利用该漏洞在受影响的 WebLogic Server上执行任意代码，它们均存在于WebLogic的Console控制台组件中。此组件为WebLogic全版本默认自带组件，且该漏洞通过HTTP协议进行利用，将CVE-2020-14882和CVE-2020-14883进行组合利用后，远程且未经授权的攻击者可以直接在服务端执行任意代码获取系统权限。</li>
+</ul>
+<pre><code>##影响版本：
+Oracle WebLogic Server 版本10.3.6.0
+Oracle WebLogic Server 版本12.1.3.0
+Oracle WebLogic Server 版本12.2.1.3
+Oracle WebLogic Server 版本12.2.1.4
+Oracle WebLogic Server 版本14.1.1.0
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2020-14882.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+请受影响用户及时下载补丁程序并安装更新https://www.oracle.com/security-alerts/cpuoct2020.html</p>
+<ul>
+<li><strong>6.4 Weblogic SSRF漏洞</strong><br>
+<strong>漏洞原理：</strong><br>
+Weblogic中存在一个SSRF漏洞，利用该漏洞可以发送任意HTTP请求，进而攻击内网中redis、fastcgi等脆弱组件。SSRF漏洞可以通过篡改获取资源的请求发送给服务器，但是服务器并没有检测这个请求是否合法的，然后服务器以他的身份来访问其他服务器的资源。</li>
+</ul>
+<pre><code>##影响范围
+Oracle WebLogic Server 10.3.6.0
+Oracle WebLogic Server 10.0.2.0
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/weblogicssrf.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).如果不需要UDDI功能，就关闭这个功能。可以删除uddiexporer文件夹，可以可在/web在/weblogicPath/server/lib/uddiexplorer.war解压后，注释掉上面的jsp再打包;<br>
+(2).安装更新补丁包http://www.oracle.com/technetwork/topics/security/cpujul2014-1972956.html。</p>
+<h3 id="7jetty">7.Jetty</h3>
+<ul>
+<li><strong>7.1 Jetty WEB-INF敏感信息泄露漏洞(CVE-2021-28164、CVE-2021-34429)</strong><br>
+<strong>漏洞原理：</strong><br>
+该漏洞主要是由于Jetty 9.4.37引入对RFC3986的新实现，而URL编码的.字符被排除在URI规范之外，这个行为在RFC中是正确的，但在servlet的实现中导致攻击者可以通过%2e来绕过限制，下载WEB-INF目录下的任意文件，导致敏感信息泄露。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2021-34429.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+(1).过滤掉/.等特殊字符；<br>
+(2).升级到9.4.43及以上安全版本。</li>
+<li><strong>7.2 Jetty Utility Servlets ConcatServlet双重解码信息泄露漏洞(CVE-2021-28169)</strong><br>
+<strong>漏洞原理：</strong><br>
+在9.4.40, 10.0.2, 11.0.2版本前，Jetty Servlets中的ConcatServlet、WelcomeFilter类存在多重解码问题，如果开发者主动使用了这两个类，攻击者可以利用其访问WEB-INF目录下的敏感文件，造成配置文件及代码泄露。</li>
+</ul>
+<pre><code>##影响版本：
+jetty 9.4.40
+jetty 10.0.2
+jetty 11.0.2
+</code></pre>
+<p><img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/cve-2021-28169.png" alt="" loading="lazy"><br>
+<strong>修复方案：</strong><br>
+建议受影响的用户及时更新升级到最新版本https://www.eclipse.org/jetty/download.php</p>
+<h2 id="三-总结">三、总结</h2>
+<p>未知攻、焉知防，黑客常常利用网站操作系统的漏洞和Web中间件漏洞等得到Web服务器的控制权限，轻则篡改网页内容，重则窃取重要内部数据，更为严重的则是在网页中植入恶意代码，使得网站访问者受到侵害。守护网站的安全需要我们时时刻刻关注安全动态！</p>
+<h2 id="四-参考">四、参考</h2>
+<p>https://www.cnblogs.com/bonelee/p/14727268.html<br>
+https://www.shuzhiduo.com/A/obzbQmQbdE</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://0kccc.github.io/post/ji-kuan-chang-jian-de-ya-ce-gong-ju-bi-jiao/">
+                  <h3 class="post-title">
+                    几款常见的压测工具比较
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '3d062d911e59ec4e0804',
+        clientSecret: '790f7f2e530e29016bdac68c460b9f4afd71e62f',
+        repo: '0kccc.github.io',
+        owner: '0kccc',
+        admin: ['0kccc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

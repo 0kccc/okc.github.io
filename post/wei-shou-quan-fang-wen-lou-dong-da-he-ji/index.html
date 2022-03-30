@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>未授权访问漏洞大合集 | okc</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://0kccc.github.io/favicon.ico?v=1648609156081">
+<link rel="stylesheet" href="https://0kccc.github.io/styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="[TOC]
+0x01 前言
+未授权访问漏洞是一个在企业内部非常常见的问题，通常是由于认证存在缺陷、无认证或安全配置不当导致。常见于服务端口，接口未限制开放，网页功能通过链接无限制用户访问，低权限用户越权访问高权限功能。由于此类漏洞的攻击成本..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://0kccc.github.io">
+        <img src="https://0kccc.github.io/images/avatar.png?v=1648609156081" class="site-logo">
+        <h1 class="site-title">okc</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+          <a class="social-link" href="https://github.com/0kccc" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      突击小分队233~
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://0kccc.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">未授权访问漏洞大合集</h2>
+            <div class="post-date">2022-03-30</div>
+            
+            <div class="post-content" v-pre>
+              <p>[TOC]</p>
+<h2 id="0x01-前言">0x01 前言</h2>
+<p>未授权访问漏洞是一个在企业内部非常常见的问题，通常是由于认证存在缺陷、无认证或安全配置不当导致。常见于服务端口，接口未限制开放，网页功能通过链接无限制用户访问，低权限用户越权访问高权限功能。由于此类漏洞的攻击成本极低，效果明显，影响巨大，因此此类漏洞必须引起我们的高度重视。</p>
+<h2 id="0x02-常见应用服务的未授权访问">0x02 常见应用/服务的未授权访问</h2>
+<h4 id="1redis-未授权访问漏洞">1.Redis 未授权访问漏洞</h4>
+<h5 id="端口6379">端口：6379</h5>
+<h5 id="漏洞描述及危害">漏洞描述及危害</h5>
+<p>Redis 默认情况下，会绑定在 0.0.0.0:6379，如果没有进行采用相关的策略，比如添加防火墙规则避免其他非信任来源 ip 访问等，这样将会将Redis服务暴露到公网上，如果在没有设置密码认证（一般为空）的情况下，会导致任意用户在可以访问目标服务器的情况下未授权访问Redis以及读取Redis 的数据。攻击者在未授权访问Redis的情况下，利用Redis自身的提供的config命令，可以进行写文件操作，攻击者可以成功将自己的ssh公钥写入目标服务器的/root/.ssh文件夹的authotrized_keys文件中，进而可以使用对应私钥直接使用ssh服务登录目标服务器、添加计划任务、写入Webshell等操作。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/redis.png" alt="" loading="lazy"></p>
+<h5 id="防御手段">防御手段</h5>
+<ul>
+<li>禁止使用root权限启动redis服务。</li>
+<li>对redis访问启动密码认证。</li>
+<li>添加IP访问限制，并更改默认6379端口。</li>
+</ul>
+<h4 id="2mongodb-未授权访问漏洞">2.MongoDB 未授权访问漏洞</h4>
+<h5 id="端口27017">端口：27017</h5>
+<h5 id="漏洞描述及危害-2">漏洞描述及危害</h5>
+<p>MongoDB服务安装后，默认未开启权限验证。如果服务监听在0.0.0.0，则可远程无需授权访问数据库。造成未授权访问的根本原因就在于启动 Mongodb 的时候未设置 --auth 也很少会有人会给数据库添加上账号密码（默认空口令），使用默认空口令这将导致恶意攻击者无需进行账号认证就可以登陆到数据服务器。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/mongodb.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-2">防御手段</h5>
+<ul>
+<li>限制绑定IP，启动时加入参数--bind_ip 127.0.0.1或在 /etc/mongodb.conf文件中添加入：bind_ip = 127.0.0.1；</li>
+<li>在admin.system.users中添加用户，启动认证；</li>
+<li>设置防火墙策略，限定 IP 访问服务；</li>
+<li>禁用HTTP和REST端口，修改配置文件或在启动的时候选择参数nohttpinterface=false；</li>
+</ul>
+<h4 id="3memcached-未授权访问漏洞">3.Memcached 未授权访问漏洞</h4>
+<h5 id="端口11211">端口：11211</h5>
+<h5 id="漏洞描述及危害-3">漏洞描述及危害</h5>
+<p>Memcached 是一套常用的key-value分布式高速缓存系统，由于Memcached的安全设计缺陷没有权限控制模块，端口对外开放并且没有配置认证选项，未授权用户可直接获取数据库中所有信息，造成严重的信息泄露。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/memcached.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-3">防御手段</h5>
+<ul>
+<li>修改绑定的IP、端口和指定访问者IP；</li>
+<li>设置防火墙策略；</li>
+<li>禁止暴露在公网；</li>
+<li>配置memcached监听本地回环地址 127.0.0.1；</li>
+</ul>
+<h4 id="4vnc-未授权访问漏洞">4.VNC 未授权访问漏洞</h4>
+<h5 id="端口5900-5905">端口：5900-5905</h5>
+<h5 id="漏洞描述及危害-4">漏洞描述及危害</h5>
+<p>VNC是基于 UNIX 和 Linux 的免费开源软件由 VNC Server 和 VNC Viewer 两部分组成。VNC 默认端口号为5900、5901。VNC未授权访问漏洞如被利用可能造成恶意用户直接控制target主机。</p>
+<h5 id="防御手段-4">防御手段</h5>
+<ul>
+<li>配置 VNC 客户端登录口令认证并配置符合密码强度要求的密码；</li>
+<li>以最小权限的普通用户身份运行操作系统；</li>
+</ul>
+<h4 id="5nfs-未授权访问漏洞">5.NFS 未授权访问漏洞</h4>
+<h5 id="端口2048-2049">端口：2048、2049</h5>
+<h5 id="漏洞描述及危害-5">漏洞描述及危害</h5>
+<p>Network File System(NFS)，是由SUN公司研制的UNIX表示层协议(pressentation layer protocol)，能使使用者访问网络上别处的文件就像在使用自己的计算机一样。服务器在启用nfs服务以后，由于nfs服务未限制对外访问，导致共享目录泄漏。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/NFS.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-5">防御手段</h5>
+<ul>
+<li>利用iptables限制端口2049和2048端口的访问，禁止外部访问；</li>
+<li>设置/etc/exports，对访问进行控制；</li>
+</ul>
+<h4 id="6elasticsearch-未授权访问漏洞">6.Elasticsearch 未授权访问漏洞</h4>
+<h5 id="端口9200-9300">端口：9200、9300</h5>
+<h5 id="漏洞描述及危害-6">漏洞描述及危害</h5>
+<p>Elasticsearch是一款java编写的企业级搜索服务，它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。越来越多的公司使用ELK作为日志分析，启动此服务默认会开放9200端口或者9300端口，攻击者通常可以请求一个开放9200或9300的服务器进行恶意攻击来获取Elasticsearch的所有权限，对数据进行任意操作。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/elasticsearch.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-6">防御手段</h5>
+<ul>
+<li>访问控制策略，限制IP访问，绑定固定IP；</li>
+<li>在config/elasticsearch.yml中为9200端口设置认证等；</li>
+</ul>
+<h4 id="7docker-未授权访问漏洞">7.Docker 未授权访问漏洞</h4>
+<h5 id="端口2375-5678">端口：2375、5678</h5>
+<h5 id="漏洞描述及危害-7">漏洞描述及危害</h5>
+<p>Docker 是一个开源的引擎可以轻松地为任何应用创建一个轻量级的、可移植的、自给自足的容器。开发者在笔记本上编译测试通过的容器可以批量地在生产环境中部署包括 VMs、bare metal、OpenStack 集群和其他的基础应用平台Docker。<br>
+Docker Remote API 是一个取代远程命令行界面（rcli）的REST API。存在问题的版本分别为 1.3 和 1.6因为权限控制等问题导致可以通过 docker client 或者 http 直接请求就可以访问这个 API，通过这个接口，我们可以新建 container，删除已有 container，甚至是获取宿主机的 shell。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/docker.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-7">防御手段</h5>
+<ul>
+<li>对2375端口做网络访问控制，如ACL控制，或者访问规则；</li>
+<li>修改docker swarm的认证方式，使用TLS认证；</li>
+</ul>
+<h4 id="8jenkins-未授权访问漏洞">8.Jenkins 未授权访问漏洞</h4>
+<h5 id="端口8080web端口">端口：8080/web端口</h5>
+<h5 id="漏洞描述及危害-8">漏洞描述及危害</h5>
+<p>Jenkins是一个开源软件项目，是基于Java开发的一种持续集成工具，用于监控持续重复的工作，旨在提供一个开放易用的软件平台，使软件项目可以进行持续集成。<br>
+默认情况下Jenkins面板中用户可以选择执行脚本界面来操作一些系统层命令，攻击者可通过未授权访问漏洞或者暴力破解用户密码等进入后台管理服务，通过脚本执行界面从而获取服务器权限。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/jenkins.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-8">防御手段</h5>
+<ul>
+<li>升级版本；</li>
+<li>添加认证，设置强密码复杂度及账号锁定；</li>
+<li>禁止把Jenkins直接暴露在公网；</li>
+</ul>
+<h4 id="9smb-未授权访问漏洞">9.SMB 未授权访问漏洞</h4>
+<h5 id="端口445">端口：445</h5>
+<h5 id="漏洞描述及危害-9">漏洞描述及危害</h5>
+<p>Samba是一套实现SMB（Server Messages Block）协议、跨平台进行文件共享和打印共享服务的程序。Samba 4.0.4之前版本配置为 Active Directory 域控制器后，非默认的CIFS共享具有全局可写的权限，这可允许经过身份验证的远程用户通过标准文件系统操作，读取、修改、创建或删除任意文件。</p>
+<h5 id="防御手段-9">防御手段</h5>
+<ul>
+<li>配置samba服务设置用户名及符合强度的密码；</li>
+<li>限制访问ip；</li>
+</ul>
+<h4 id="10rsync-未授权访问漏洞">10.Rsync 未授权访问漏洞</h4>
+<h5 id="端口873">端口：873</h5>
+<h5 id="漏洞描述及危害-10">漏洞描述及危害</h5>
+<p>Rsync（remote synchronize）是一个远程数据同步工具，可通过 LAN/WAN 快速同步多台主机间的文件，也可以同步本地硬盘中的不同目录。Rsync默认允许匿名访问，如果在配置文件中没有相关的用户认证以及文件授权，就会被任何人可未授权访问rsync，上传本地文件，下载服务器文件。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/rsync.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-10">防御手段</h5>
+<ul>
+<li>账户认证：正确配置认证用户名及密码；</li>
+<li>权限控制：不需要写入权限的 module 的设置为只读 Read only = true；</li>
+<li>网络访问控制：使用安全组策略或白名单限制，只允许必要访问的主机访问；</li>
+<li>隐藏 module 信息：修改配置文件 list =false；</li>
+</ul>
+<h4 id="11zabbix-未授权访问漏洞">11.Zabbix 未授权访问漏洞</h4>
+<h5 id="端口10051">端口：10051</h5>
+<h5 id="漏洞描述及危害-11">漏洞描述及危害</h5>
+<p>zabbix是一个开源的企业级性能监控解决方案。Zabbix能监视各种网络参数，保证服务器系统的安全运营；并提供灵活的通知机制以让系统管理员快速定位/解决存在的各种问题。低版本的zabbix(2.2.x,3.0.0-3.0.3)存在SQL注入漏洞，攻击者无需授权登陆即可登陆zabbix管理系统，也可通过script等功能轻易直接获取zabbix服务器的操作系统权限。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/zabbix.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-11">防御手段</h5>
+<ul>
+<li>禁用guest登录功能；</li>
+<li>zabbix的server和agent都不要以root启动，不要设置AllowRoot=1；</li>
+<li>禁止agent执行system.run，不要设置EnableRemoteCommands=1；</li>
+</ul>
+<h4 id="12svn-未授权访问漏洞">12.SVN 未授权访问漏洞</h4>
+<h5 id="端口web端口">端口：web端口</h5>
+<h5 id="漏洞描述及危害-12">漏洞描述及危害</h5>
+<p>SVN（subversion）是源代码版本管理软件，造成SVN源代码漏洞的主要原因是管理员操作不规范。“在使用SVN管理本地代码过程中，会自动生成一个名为.svn的隐藏文件夹，其中包含重要的源代码信息，如果是使用svn checkout功能来更新代码，而没有配置好目录访问权限则会存在此漏洞，导致网站整个源码文件暴露。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/svn.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-12">防御手段</h5>
+<ul>
+<li>不要使用svn checkout和svn up更新服务器上的代码，使用svn export（导出）功能代替；</li>
+<li>服务器软件（Nginx、apache、tomcat、IIS等）设置目录权限，禁止访问.svn和.git目录；</li>
+</ul>
+<h4 id="13zookeeper-未授权访问漏洞">13.ZooKeeper 未授权访问漏洞</h4>
+<h5 id="端口2181-2182">端口：2181、2182</h5>
+<h5 id="漏洞描述及危害-13">漏洞描述及危害</h5>
+<p>zookeeper是分布式协同管理工具，常用来管理系统配置信息，提供分布式协同服务。Zookeeper安装部署之后默认情况下不需要任何身份验证，造成攻击者可以远程利用Zookeeper，通过服务器收集敏感信息或者在Zookeeper集群内进行破坏（比如：kill命令）。攻击者能够执行所有只允许由管理员运行的命令。</p>
+<h5 id="防御手段-13">防御手段</h5>
+<ul>
+<li>修改 ZooKeeper 默认端口，采用其他端口服务；</li>
+<li>添加访问控制，配置服务来源地址限制策略；</li>
+<li>增加 ZooKeeper 的认证配置；</li>
+</ul>
+<h4 id="14springboot-actuator未授权访问漏洞">14.SpringBoot Actuator未授权访问漏洞</h4>
+<h5 id="端口8080web端口-2">端口：8080/web端口</h5>
+<h5 id="漏洞描述及危害-14">漏洞描述及危害</h5>
+<p>Actuator 是springboot提供的用来对应用系统进行自省和监控的功能模块，借助于 Actuator开发者可以很方便地对应用系统某些监控指标进行查看、统计等。在Actuator启用的情况下，如果没有做好相关权限控制，非法用户可通过访问默认的执行器端点（endpoints）来获取应用系统中的监控信息，从而导致信息泄露甚至服务器被接管的事件发生。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/springboot.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-14">防御手段</h5>
+<ul>
+<li>禁用/env接口；</li>
+<li>升级到SpringBoot Actuator2.0及以上安全版本；</li>
+<li>禁止对外开放；</li>
+</ul>
+<h4 id="15jupyter-notebook-未授权访问漏洞">15.Jupyter Notebook 未授权访问漏洞</h4>
+<h5 id="端口8888">端口：8888</h5>
+<h5 id="漏洞描述及危害-15">漏洞描述及危害</h5>
+<p>Jupyter Notebook（此前被称为IPython notebook）是一个交互式笔记本，支持运行 40 多种编程语言。<br>
+如果管理员未为Jupyter Notebook配置密码，将导致未授权访问漏洞，游客可在其中创建一个console并执行任意Python代码和命令。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/jupyter.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-15">防御手段</h5>
+<ul>
+<li>开启身份验证，防止未经授权用户访问；</li>
+<li>访问控制策略，限制IP访问，绑定固定IP；</li>
+</ul>
+<h4 id="16hadoop-未授权访问漏洞">16.Hadoop 未授权访问漏洞</h4>
+<h5 id="端口80web端口-50070">端口：80/web端口、50070</h5>
+<h5 id="漏洞描述及危害-16">漏洞描述及危害</h5>
+<p>Hadoop是一个由Apache基金会所开发的分布式系统基础架构，由于服务器直接在开放了 Hadoop机器HDFS的50070 web端口及部分默认服务端口，攻击者可以通过命令行操作多个目录下的数据，如进行删除，下载，目录浏览甚至命令执行等操作，产生极大的危害。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/hadoop.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-16">防御手段</h5>
+<ul>
+<li>开启身份验证，防止未经授权用户访问；</li>
+<li>设置“安全组”访问控制策略，将Hadoop默认开放的多个端口对公网全部禁止或限制可信任的IP地址才能访问包括50070以及WebUI等相关端口；</li>
+</ul>
+<h4 id="17couchdb-未授权访问漏洞">17.CouchDB 未授权访问漏洞</h4>
+<h5 id="端口5984-6984">端口：5984、6984</h5>
+<h5 id="漏洞描述及危害-17">漏洞描述及危害</h5>
+<p>Apache CouchDB是一个面向文档的数据库管理系统。它提供以JSON作为数据格式的REST接口来对其进行操作，并可以通过视图来操纵文档的组织和呈现。默认会在5984端口开放Restful的API接口，如果使用SSL的话就会监听在6984端口，用于数据库的管理功能。其HTTP Server默认开启时没有进行验证，而且绑定在0.0.0.0，所有用户均可通过API访问导致未授权访问。</p>
+<h5 id="防御手段-17">防御手段</h5>
+<ul>
+<li>通过防火墙等安全配置限制访问ip；</li>
+<li>设置访问密码；</li>
+</ul>
+<h4 id="18atlassian-crowd-未授权访问漏洞">18.Atlassian Crowd 未授权访问漏洞</h4>
+<h5 id="端口8095">端口：8095</h5>
+<h5 id="漏洞描述及危害-18">漏洞描述及危害</h5>
+<p>Atlassian Crowd和Atlassian Crowd Data Center都是澳大利亚Atlassian公司的产品。Atlassian Crowd是一套基于Web的单点登录系统。该系统为多用户、网络应用程序和目录服务器提供验证、授权等功能。Atlassian Crowd Data Center是Crowd的集群部署版。<br>
+Atlassian Crowd和Crowd Data Center在其某些发行版本中错误地启用了pdkinstall开发插件。从而使攻击者可以在未授权访问的情况下对Atlassian Crowd和Crowd Data Center安装任意的恶意插件，攻击者借用此漏洞安装的恶意插件可以在目标服务器上执行任意命令，从而获得服务器权限。</p>
+<h5 id="防御手段-18">防御手段</h5>
+<ul>
+<li>设置访问/crowd/admin/uploadplugin.action的源ip；</li>
+<li>升级到3.5.0及以上安全版本；</li>
+</ul>
+<h4 id="19jboss-未授权访问漏洞">19.JBOSS 未授权访问漏洞</h4>
+<h5 id="端口8080web端口-3">端口：8080/web端口</h5>
+<h5 id="漏洞描述及危害-19">漏洞描述及危害</h5>
+<p>JBoss是一个基于J2EE的开放源代码应用服务器，代码遵循LGPL许可，可以在任何商业应用中免费使用；JBoss也是一个管理EJB的容器和服务器，支持EJB 1.1、EJB 2.0和EJB3规范。默认情况下访问 http://ip:8080/jmx-console 就可以浏览JBoss的部署管理的信息不需要输入用户名和密码可以直接部署上传木马有安全隐患。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/jboss.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-19">防御手段</h5>
+<ul>
+<li>对jmx控制页面访问添加访问验证；</li>
+<li>进行JMX Console 安全配置；</li>
+</ul>
+<h4 id="20druid-未授权访问漏洞">20.Druid 未授权访问漏洞</h4>
+<h5 id="端口8081-8084web端口">端口：8081-8084/web端口</h5>
+<h5 id="漏洞描述及危害-20">漏洞描述及危害</h5>
+<p>Druid是阿里研发的一款数据库连接池，其开发语言为java，druid集合了c3p0、dbcp、proxool等连接池的优点，还加入了日志监控、session监控等数据监控功能，使用Druid能有效的监控DB池连接和SQL的执行情况。druid虽高效好用，但当开发者配置不当时就可能造成未授权访问，攻击者可利用泄露的Session登录后台。</p>
+<h5 id="防御手段-20">防御手段</h5>
+<ul>
+<li>配置web.xml中servlet的初始化参数loginUsername和loginPassword设置访问账号密码；</li>
+<li>禁止对外网开放访问或限制访问ip；</li>
+</ul>
+<h4 id="21ftp-未授权访问漏洞">21.FTP 未授权访问漏洞</h4>
+<h5 id="端口21">端口：21</h5>
+<h5 id="漏洞描述及危害-21">漏洞描述及危害</h5>
+<p>FTP 弱口令或匿名登录漏洞，一般指使用 FTP 的用户启用了匿名登录功能，或系统口令的长度太短、复杂度不够、仅包含数字、或仅包含字母等，容易被黑客攻击，发生恶意文件上传或更严重的入侵行为。</p>
+<h5 id="防御手段-21">防御手段</h5>
+<ul>
+<li>禁止匿名登录；</li>
+<li>配置强密码且密码长度建议八位以上，应包括大小写字母、特殊字符、数字混合体；</li>
+</ul>
+<h4 id="22kibana-未授权访问漏洞">22.Kibana 未授权访问漏洞</h4>
+<h5 id="端口5601">端口：5601</h5>
+<h5 id="漏洞描述及危害-22">漏洞描述及危害</h5>
+<p>Kibana是一个开源的分析与可视化平台，设计出来用于和Elasticsearch一起使用的，你可以用kibana搜索、查看存放在Elasticsearch中的数据。Kibana如果允许外网访问，且没有做安全登录认证，也会被外部随意访问查看所有的数据，造成严重的数据泄露。</p>
+<h5 id="防御手段-22">防御手段</h5>
+<ul>
+<li>设置kibana监听本地地址，并设置ElasticSearch登录的账号和密码；</li>
+<li>设置防火墙策略，限定IP访问服务；</li>
+</ul>
+<h4 id="23ldap-未授权访问漏洞">23.LDAP 未授权访问漏洞</h4>
+<h5 id="端口389">端口：389</h5>
+<h5 id="漏洞描述及危害-23">漏洞描述及危害</h5>
+<p>LDAP中文全称为：轻型目录访问协议（Lightweight Directory Access Protocol），默认使用389，LDAP底层一般使用TCP或UDP作为传输协议。目录服务是一个特殊的数据库，是一种以树状结构的目录数据库为基础。未对LDAP的访问进行密码验证，导致未授权访问。</p>
+<h5 id="防御手段-23">防御手段</h5>
+<ul>
+<li>修改ldap的acl，禁止匿名访问；</li>
+<li>根据业务设置ldap访问白名单或黑名单；</li>
+</ul>
+<h4 id="24solr-未授权访问漏洞">24.Solr 未授权访问漏洞</h4>
+<h5 id="端口8983">端口：8983</h5>
+<h5 id="漏洞描述及危害-24">漏洞描述及危害</h5>
+<p>Solr是一个高性能，采用Java开发，基于Lucene的全文搜索服务器。同时对其进行了扩展，提供了比Lucene更为丰富的查询语言，同时实现了可配置、可扩展并对查询性能进行了优化，并且提供了一个完善的功能管理界面，是一款非常优秀的全文搜索引擎。solr如果没有安全配置直接暴露在公网上危害很大，攻击者可直接未授权访问查询所有数据库信息，进一步可读取系统任意文件，甚至getshell。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/solr.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-24">防御手段</h5>
+<ul>
+<li>配置solr访问控制权限；</li>
+<li>禁止将solr暴露在公网；</li>
+</ul>
+<h4 id="25spark-未授权访问漏洞">25.Spark 未授权访问漏洞</h4>
+<h5 id="端口8080-8081-6066-7077">端口：8080、8081、6066、7077</h5>
+<h5 id="漏洞描述及危害-25">漏洞描述及危害</h5>
+<p>Apache Spark是一款集群计算系统，其支持用户向管理节点提交应用，并分发给集群执行。如果管理节点未启动访问控制，攻击者可以在集群中执行任意代码。该漏洞的本质是未授权用户可以向Master节点提交一个应用，Master节点会分发给Slave节点执行应用。如果应用中包含恶意代码，会导致任意代码执行，威胁Spark集群整体的安全性。</p>
+<h5 id="防御手段-25">防御手段</h5>
+<ul>
+<li>关闭对外端口：对外关闭8080(Standalone Master Web UI端口)、8081(Standalone Worker Web UI端口)、6066(Standalone Master Rest Server Api端口)、7077(Standalone Master集群作业提交端口)等Spark端口；</li>
+<li>权限认证：用户可以自定义javax servlet filter来对登陆用户进行认证，Spark会根据用户的ACL（访问控制列表）来确保该登陆用户有权限访问某个Spark应用的web UI；</li>
+<li>开启Spnego Authentication认证机制；</li>
+</ul>
+<h4 id="26weblogic-未授权访问漏洞">26.Weblogic 未授权访问漏洞</h4>
+<h5 id="端口7001">端口：7001</h5>
+<h5 id="漏洞描述及危害-26">漏洞描述及危害</h5>
+<p>Weblogic是Oracle公司推出的J2EE应用服务器，CVE-2020-14882允许未授权的用户绕过管理控制台的权限验证访问后台，CVE-2020-14883允许后台任意用户通过HTTP协议执行任意命令。使用这两个漏洞组成的利用链，可通过一个GET请求在远程Weblogic服务器上以未授权的任意用户身份执行命令。（<strong>上述受影响的Weblogic版本：10.3.6.0.0, 12.1.3.0.0, 12.2.1.3.0, 12.2.1.4.0, 14.1.1.0.0</strong>）<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/weblogic.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-26">防御手段</h5>
+<ul>
+<li>根据版本下载最新的漏洞补丁：https://support.oracle.com/portal/；</li>
+</ul>
+<h4 id="27dubbo-未授权访问漏洞">27.Dubbo 未授权访问漏洞</h4>
+<h5 id="端口20880">端口：20880</h5>
+<h5 id="漏洞描述及危害-27">漏洞描述及危害</h5>
+<p>Apache Dubbo是阿里巴巴公司开源的一个高性能优秀的服务框架，使得应用可通过高性能的RPC实现服务的输出和输入功能，可以和Spring框架无缝集成。dubbo因配置不当导致未授权访问漏洞。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/dubbo.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-27">防御手段</h5>
+<ul>
+<li>配置dubbo认证；</li>
+<li>设置防火墙策略，限定IP访问；</li>
+</ul>
+<h4 id="28php-fpm-fastcgi未授权访问漏洞">28.PHP-FPM Fastcgi未授权访问漏洞</h4>
+<h5 id="端口9000">端口：9000</h5>
+<h5 id="漏洞描述及危害-28">漏洞描述及危害</h5>
+<p>Fastcgi是一个通信协议，和HTTP协议一样，都是进行数据交换的一个通道。类比HTTP协议来说，fastcgi协议则是服务器中间件和某个语言后端进行数据交换的协议。PHP-FPM是一个fastcgi协议解析器，Nginx等服务器中间件将用户请求按照fastcgi的规则打包好传给FPM。FPM按照fastcgi的协议将TCP流解析成真正的数据。PHP-FPM默认监听9000端口，如果这个端口暴露在公网，则我们可以自己构造fastcgi协议，和fpm进行通信。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/php-fpm.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-28">防御手段</h5>
+<ul>
+<li>禁止默认端口对外开放访问；</li>
+<li>限制访问源ip；</li>
+</ul>
+<h4 id="29swagger-未授权访问漏洞">29.Swagger 未授权访问漏洞</h4>
+<h5 id="端口web端口-2">端口：web端口</h5>
+<h5 id="漏洞描述及危害-29">漏洞描述及危害</h5>
+<p>Swagger是一个规范且完整的框架，用于生成、描述、调用和可视化RESTful风格的Web 服务。Swagger的目标是对REST API定义一个标准且和语言无关的接口，可以让人和计算机拥有无须访问源码、文档或网络流量监测就可以发现和理解服务的能力。如果开发者配置不当的话会导致存在未授权访问漏洞，进而获取接口中存在查询用户信息、上传文件等多个敏感操作。<br>
+<img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/Swagger.png" alt="" loading="lazy"></p>
+<h5 id="防御手段-29">防御手段</h5>
+<ul>
+<li>对Swagger生成接口文档进行权限验证；</li>
+<li>限制访问ip；</li>
+</ul>
+<h4 id="30gitlab-未授权访问漏洞">30.GitLab 未授权访问漏洞</h4>
+<h5 id="端口20880-2">端口：20880</h5>
+<h5 id="漏洞描述及危害-30">漏洞描述及危害</h5>
+<p>GitLab是一个利用Ruby on Rails开发的开源应用程序，实现一个自托管的Git项目仓库，可通过Web界面进行访问公开的或者私人项目。在8.13.0版本之前，由于GitLab没有检查符号链接（symlinks），因此经过身份验证的用户可以检索任何GitLab账户中的文件，甚至是secret tokens等敏感信息，进而导致远程命令执行。</p>
+<h5 id="防御手段-30">防御手段</h5>
+<ul>
+<li>升级Gitlab至安全版本；</li>
+<li>关闭GitLab export；</li>
+</ul>
+<h2 id="0x03-总结">0x03 总结</h2>
+<p>以上都是我们工作中经常使用、测试的系统服务，未授权访问漏洞是常见的攻击入口点，某些严重的未授权访问会直接导致getshell。产生未授权漏洞的根本原因其实是访问控制没有做好， 在内网中存在大量的未授权访问漏洞，因为绝大多数人认为只要在内网就安全了。虽然攻击者无法从外部直接攻击，但是一旦进入内网，将对系统造成无法挽回的损失。所以能设置账户密码尽量设置密码，能开启访问控制尽量开启访问控制，或者使用二次认证、零信任网关等形式。</p>
+<h2 id="0x04-参考">0x04 参考</h2>
+<p>https://www.freebuf.com/vuls/254160.html<br>
+https://xz.aliyun.com/t/6103</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://0kccc.github.io/post/chang-yong-web-zhong-jian-jian-lou-dong-zong-jie/">
+                  <h3 class="post-title">
+                    常用Web中间件漏洞总结
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: '3d062d911e59ec4e0804',
+        clientSecret: '790f7f2e530e29016bdac68c460b9f4afd71e62f',
+        repo: '0kccc.github.io',
+        owner: '0kccc',
+        admin: ['0kccc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
