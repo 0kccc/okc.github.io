@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://0kccc.github.io</id>
     <title>okc</title>
-    <updated>2022-03-30T02:59:28.962Z</updated>
+    <updated>2022-03-30T03:03:03.949Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://0kccc.github.io"/>
     <link rel="self" href="https://0kccc.github.io/atom.xml"/>
@@ -439,7 +439,7 @@ Apache HTTPD是一款HTTP服务器，它可以通过mod_php来运行PHP网页在
 <img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86.png" alt="" loading="lazy"><br>
 <img src="https://okc-pic.oss-cn-beijing.aliyuncs.com/img/apache%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%862.png" alt="" loading="lazy"><br>
 <strong>修复方案：</strong><br>
-在httpd.conf中讲“+Indexes”修改为“-Indexes”，禁止目录浏览</li>
+在httpd.conf中将“+Indexes”修改为“-Indexes”，禁止目录浏览</li>
 </ul>
 <h3 id="3nginx">3.Nginx</h3>
 <ul>
